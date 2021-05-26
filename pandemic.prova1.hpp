@@ -6,66 +6,75 @@
 #include <vector>
 
 struct World_state {
-  double S;
-  double I;
-  double R;
+  long double S;
+  long double I;
+  long double R;
   double beta;
   double gamma;
   int N;
 };
 
 World_state approx(World_state& state) {  // non funziona, rivedi meglio
-  double decimals_R = state.R - static_cast<int>(state.R);
-  double decimals_S = state.S - static_cast<int>(state.S);
-  double decimals_I = state.I - static_cast<int>(state.I);
-  double decimal_sum = decimals_I + decimals_R + decimals_S;
-  if (decimal_sum == 1.0) {
+  double integral_R = static_cast<int>(state.R);
+  double integral_S = static_cast<int>(state.S);
+  double integral_I = static_cast<int>(state.I);
+
+  long double decimals_R = state.R - integral_R;
+  long double decimals_S = state.S - integral_S;
+  long double decimals_I = state.I - integral_I;
+  auto decimal_sum = decimals_I + decimals_R + decimals_S;
+
+  if (0.8 <= decimal_sum && decimal_sum <= 1.2) {
     if (decimals_S > decimals_R && decimals_S > decimals_I) {
-      ++state.S;
+      ++integral_S;
     }
     if (decimals_I > decimals_R && decimals_I > decimals_S) {
-      ++state.I;
+      ++integral_I;
     }
     if (decimals_R > decimals_S && decimals_S > decimals_I) {
-      ++state.R;
+      ++integral_R;
     }
     if (decimals_S == decimals_I && decimals_S == .5) {
-      ++state.S;
+      ++integral_S;
     }
     if (decimals_I == decimals_R && decimals_I == .5) {
-      ++state.I;
+      ++integral_I;
     }
     if (decimals_R == decimals_S && decimals_R == .5) {
-      ++state.R;
+      ++integral_R;
     }
   }
-  if (decimal_sum == 2) {  // qua c'è un problema da qualche parte, non
-                           // approssima correttamente  :_(
+  if (1.8 <= decimal_sum && decimal_sum <= 2.2) {
     if (decimals_S > decimals_R or decimals_S > decimals_I) {
-      ++state.S;
+      ++integral_S;
     }
     if (decimals_I > decimals_R or decimals_I > decimals_S) {
-      ++state.I;
+      ++integral_I;
     }
     if (decimals_R > decimals_S or decimals_S > decimals_I) {
-      ++state.R;
+      ++integral_R;
     }
     if (decimals_S == decimals_I && decimals_S < decimals_R) {
-      ++state.S;
+      ++integral_S;
     }
     if (decimals_I == decimals_R && decimals_I < decimals_S) {
-      ++state.I;
+      ++integral_I;
     }
     if (decimals_R == decimals_S && decimals_R < decimals_I) {
-      ++state.R;
+      ++integral_R;
     }
   }
   if (decimal_sum == 0) {
+  } else {  // è solo uno strumeto di controllo che i nostri decimali rientirno
+            // in uno dei tre casi sopra, va tolto in consegna del progetto 
+    state.I = 0;
+    state.S = 0;
+    state.R = 0;
   }
 
-  state.S = static_cast<int>(state.S);
-  state.I = static_cast<int>(state.I);
-  state.R = static_cast<int>(state.R);  // le parti intere di S I e R
+  state.S = integral_S;
+  state.I = integral_I;
+  state.R = integral_R;  // le parti intere di S I e R
   return state;
 }
 
@@ -104,16 +113,19 @@ class Pandemic {
                         // inizializzazione!!!!!!!!)
 
     for (int day = 1; day <= m_duration_in_days; ++day) {
-      double R = state.R + state.gamma * state.I;
-      double S = state.S - state.beta * state.S * state.I / state.N;
-      double I = state.I + state.beta * state.S * state.I / state.N -
-                 state.gamma * state.I;
+      long double R = state.R + state.gamma * state.I;
+      long double S =
+          state.S - state.beta * state.S * state.I * std::pow(state.N, -1);
+      long double I = state.I +
+                      state.beta * state.S * state.I * std::pow(state.N, -1) -
+                      state.gamma * state.I;
       state.S = S;
       state.I = I;
       state.R = R;
       state = approx(state);
 
-      // assert(state.S + state.I + state.R == state.N);
+      // assert(state.S + state.I + state.R==state.N);  //non capisco perchè
+      // fallisce, se uno li somma a mano il totale è ok!?
 
       result.push_back(state);
     }

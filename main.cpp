@@ -1,4 +1,5 @@
 #include <iostream>
+#include<iomanip>
 #include"pandemic.prova1.hpp"
 //#include"pandemic.hpp"
 
@@ -17,7 +18,7 @@ int main() {
   Pandemic sir{initial_state,duration_in_days};
   auto a=sir.evolve();
   for (int i=0;i<duration_in_days;++i){
-      std::cout<<a[i].S<<'\n'<<a[i].I<<'\n'<<a[i].R<<'\n'<<'\n';
+      std::cout<<std::setprecision(100)<<a[i].S<<'\n'<<a[i].I<<'\n'<<a[i].R<<'\n'<<'\n';
   }
   
 }
