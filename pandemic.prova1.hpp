@@ -6,22 +6,22 @@
 #include <vector>
 
 struct World_state {
-  long double S;
-  long double I;
-  long double R;
+  double S;
+  double I;
+  double R;
   double beta;
   double gamma;
   int N;
 };
 
-World_state approx(World_state& state) { //non funziona, rivedi meglio 
+World_state approx(World_state& state) {  // non funziona, rivedi meglio
   double decimals_R = state.R - static_cast<int>(state.R);
   double decimals_S = state.S - static_cast<int>(state.S);
   double decimals_I = state.I - static_cast<int>(state.I);
   double decimal_sum = decimals_I + decimals_R + decimals_S;
-  if (decimal_sum == 1) {
+  if (decimal_sum == 1.0) {
     if (decimals_S > decimals_R && decimals_S > decimals_I) {
-      ++state.I;
+      ++state.S;
     }
     if (decimals_I > decimals_R && decimals_I > decimals_S) {
       ++state.I;
@@ -39,14 +39,15 @@ World_state approx(World_state& state) { //non funziona, rivedi meglio
       ++state.R;
     }
   }
-  if (decimal_sum == 2) {
-    if (decimals_S > decimals_R || decimals_S > decimals_I) {
+  if (decimal_sum == 2) {  // qua c'è un problema da qualche parte, non
+                           // approssima correttamente  :_(
+    if (decimals_S > decimals_R or decimals_S > decimals_I) {
       ++state.S;
     }
-    if (decimals_I > decimals_R || decimals_I > decimals_S) {
+    if (decimals_I > decimals_R or decimals_I > decimals_S) {
       ++state.I;
     }
-    if (decimals_R > decimals_S || decimals_S > decimals_I) {
+    if (decimals_R > decimals_S or decimals_S > decimals_I) {
       ++state.R;
     }
     if (decimals_S == decimals_I && decimals_S < decimals_R) {
@@ -58,6 +59,8 @@ World_state approx(World_state& state) { //non funziona, rivedi meglio
     if (decimals_R == decimals_S && decimals_R < decimals_I) {
       ++state.R;
     }
+  }
+  if (decimal_sum == 0) {
   }
 
   state.S = static_cast<int>(state.S);
@@ -83,8 +86,9 @@ class Pandemic {
     assert(initial_state.gamma >= 0 && initial_state.gamma <= 1);
     assert(initial_state.N > 0 && initial_state.S >= 0 &&
            initial_state.R >= 0 && initial_state.I >= 0);
-    assert(initial_state.N == initial_state.S + initial_state.R +
-                                  initial_state.I);  // ha senso metterli qua??
+    assert(initial_state.N ==
+           initial_state.S + initial_state.R + initial_state.I);
+    assert(duration_in_days > 0);  // ha senso metterli qua??
   }
 
   std::vector<World_state> evolve()
@@ -100,10 +104,10 @@ class Pandemic {
                         // inizializzazione!!!!!!!!)
 
     for (int day = 1; day <= m_duration_in_days; ++day) {
-      long double R = state.R + state.gamma * state.I;
-      long double S = state.S - state.beta * state.S * state.I / state.N;
-      long double I = state.I + state.beta * state.S * state.I / state.N -
-                      state.gamma * state.I;
+      double R = state.R + state.gamma * state.I;
+      double S = state.S - state.beta * state.S * state.I / state.N;
+      double I = state.I + state.beta * state.S * state.I / state.N -
+                 state.gamma * state.I;
       state.S = S;
       state.I = I;
       state.R = R;
