@@ -24,7 +24,7 @@ World_state approx(World_state& state) {  // non funziona, rivedi meglio
   long double decimals_I = state.I - integral_I;
   auto decimal_sum = decimals_I + decimals_R + decimals_S;
 
-  if (0.8 <= decimal_sum && decimal_sum <= 1.2) {
+  if (0.9 <= decimal_sum && decimal_sum <= 1.1) {
     if (decimals_S > decimals_R && decimals_S > decimals_I) {
       ++integral_S;
     }
@@ -44,7 +44,7 @@ World_state approx(World_state& state) {  // non funziona, rivedi meglio
       ++integral_R;
     }
   }
-  if (1.8 <= decimal_sum && decimal_sum <= 2.2) {
+  if (1.9 <= decimal_sum && decimal_sum <= 2.1) {
     if (decimals_S > decimals_R or decimals_S > decimals_I) {
       ++integral_S;
     }
