@@ -17,8 +17,8 @@ int main() {
 
   Pandemic sir{initial_state,duration_in_days};
   auto a=sir.evolve();
-  for (int i=0;i<duration_in_days;++i){
-      std::cout<<std::setprecision(100)<<a[i].S<<'\n'<<a[i].I<<'\n'<<a[i].R<<'\n'<<'\n';
-  }
+  //for (int i=0;i<duration_in_days;++i){
+    //  std::cout<<std::setprecision(100)<<a[i].S<<'\n'<<a[i].I<<'\n'<<a[i].R<<'\n'<<'\n';
+  //}
   
 }

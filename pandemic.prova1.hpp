@@ -15,9 +15,9 @@ struct World_state {
 };
 
 World_state approx(World_state& state) {  // non funziona, rivedi meglio
-  double integral_R = static_cast<int>(state.R);
-  double integral_S = static_cast<int>(state.S);
-  double integral_I = static_cast<int>(state.I);
+  int integral_R = static_cast<int>(state.R);
+  int integral_S = static_cast<int>(state.S);
+  int integral_I = static_cast<int>(state.I);
 
   long double decimals_R = state.R - integral_R;
   long double decimals_S = state.S - integral_S;
@@ -31,7 +31,7 @@ World_state approx(World_state& state) {  // non funziona, rivedi meglio
     if (decimals_I > decimals_R && decimals_I > decimals_S) {
       ++integral_I;
     }
-    if (decimals_R > decimals_S && decimals_S > decimals_I) {
+    if (decimals_R > decimals_S && decimals_R > decimals_I) {
       ++integral_R;
     }
     if (decimals_S == decimals_I && decimals_S == .5) {
@@ -51,7 +51,7 @@ World_state approx(World_state& state) {  // non funziona, rivedi meglio
     if (decimals_I > decimals_R or decimals_I > decimals_S) {
       ++integral_I;
     }
-    if (decimals_R > decimals_S or decimals_S > decimals_I) {
+    if (decimals_R > decimals_S or decimals_R > decimals_I) {
       ++integral_R;
     }
     if (decimals_S == decimals_I && decimals_S < decimals_R) {
@@ -109,8 +109,7 @@ class Pandemic {
     assert(!result.empty());  // Result non vuoto(sennò è errore)
 
     World_state state =
-        result.back();  // state è l'ultimo elemento di result(ossia quello di
-                        // inizializzazione!!!!!!!!)
+        result.back();  // state è l'ultimo elemento di result(Forse va dentro al for?)
 
     for (int day = 1; day <= m_duration_in_days; ++day) {
       long double R = state.R + state.gamma * state.I;
@@ -124,7 +123,7 @@ class Pandemic {
       state.R = R;
       state = approx(state);
 
-      // assert(state.S + state.I + state.R==state.N);  //non capisco perchè
+      assert(state.S + state.I + state.R==state.N);  //non capisco perchè
       // fallisce, se uno li somma a mano il totale è ok!?
 
       result.push_back(state);
