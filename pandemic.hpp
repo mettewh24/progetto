@@ -6,9 +6,9 @@
 #include <vector>
 
 struct World_state {
-  long double S;
-  long double I;
-  long double R;
+  double S;
+  double I;
+  double R;
   double beta;
   double gamma;
   int N;
@@ -19,9 +19,9 @@ World_state approx(World_state& state) {  // non funziona, rivedi meglio
   int integral_S = static_cast<int>(state.S);
   int integral_I = static_cast<int>(state.I);
 
-  long double decimals_R = state.R - integral_R;
-  long double decimals_S = state.S - integral_S;
-  long double decimals_I = state.I - integral_I;
+  double decimals_R = state.R - integral_R;
+  double decimals_S = state.S - integral_S;
+  double decimals_I = state.I - integral_I;
   auto decimal_sum = decimals_I + decimals_R + decimals_S;
 
   if (0.9 <= decimal_sum && decimal_sum <= 1.1) {
@@ -112,10 +112,10 @@ class Pandemic {
         result.back();  // state è l'ultimo elemento di result(Forse va dentro al for?)
 
     for (int day = 1; day <= m_duration_in_days; ++day) {
-      long double R = state.R + state.gamma * state.I;
-      long double S =
+      double R = state.R + state.gamma * state.I;
+      double S =
           state.S - state.beta * state.S * state.I * std::pow(state.N, -1);
-      long double I = state.I +
+      double I = state.I +
                       state.beta * state.S * state.I * std::pow(state.N, -1) -
                       state.gamma * state.I;
       state.S = S;

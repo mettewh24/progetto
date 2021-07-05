@@ -10,7 +10,7 @@ void print(std::vector<World_state> const& state) {
                "+-----------+-----------+-----------+-----------+\n"
             << std::fixed;
   for (auto& state : state) {
-    std::cout <<std::setprecision(1)<< "| " << std::setw(9) << state.S << " | " << std::setw(9)
+    std::cout <<std::setprecision(0)<< "| " << std::setw(9) << state.S << " | " << std::setw(9)
               << state.I << " | " << std::setw(9) << state.R << " | "
               << std::setw(9) << state.N << " |\n";
   }
