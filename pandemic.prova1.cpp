@@ -87,7 +87,7 @@ World_state Pandemic::next(World_state& state)
   state.R = R;
   state = approx(state);
 
-  assert(state.S + state.I + state.R == state.N);
+  assert(state.S + state.I + state.R == state.N);//!
 
   return state;
 }
@@ -97,7 +97,7 @@ std::vector<World_state> Pandemic::evolve() const {
       p_initial_state};     // result ha già lo stato iniziale come elemento
   assert(!result.empty());  // Result non vuoto(sennò è errore)
 
-  for (int i = 1; i <= p_duration_in_days; ++i) {
+  for (int i = 1; i < p_duration_in_days; ++i) {
     result.push_back(next(result.back()));
   }
   return result;
