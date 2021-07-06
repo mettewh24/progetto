@@ -1,7 +1,7 @@
 #include<iostream>
 #include <SFML/Graphics.hpp>
 #include <iomanip>
-#include <iostream>
+#include <fstream>
 
 #include "pandemic.prova1.hpp"
 //#include"pandemic.hpp"
