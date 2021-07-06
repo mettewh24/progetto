@@ -3,6 +3,7 @@
 
 #include <cassert>
 #include <cmath>
+#include <stdexcept>
 #include <vector>
 
 struct World_state {
@@ -25,18 +26,36 @@ class Pandemic {
  public:
   Pandemic(World_state const& initial_state, int duration_in_days)
       : p_initial_state{initial_state}, p_duration_in_days{duration_in_days} {
-    assert(initial_state.beta >= 0 && initial_state.beta <= 1);
-    assert(initial_state.gamma >= 0 && initial_state.gamma <= 1);
-    assert(initial_state.N > 0 && initial_state.S >= 0 &&
-           initial_state.R >= 0 && initial_state.I >= 0);
-    assert(initial_state.N ==
-           initial_state.S + initial_state.R + initial_state.I);
-    assert(duration_in_days > 0);  // ha senso metterli qua??
+    if (initial_state.beta <= 0 || initial_state.beta >= 1) {
+      throw std::runtime_error("Invalid beta value");
+    };
+    if (initial_state.gamma <= 0 || initial_state.gamma >= 1) {
+      throw std::runtime_error("Invalid gamma value");
+    };
+    if (initial_state.N <= 0) {
+      throw std::runtime_error("Invalid N value");
+    };
+    if (initial_state.S < 0) {
+      throw std::runtime_error("Invalid S value");
+    };
+    if (initial_state.I < 0) {
+      throw std::runtime_error("Invalid I value");
+    };
+    if (initial_state.R < 0) {
+      throw std::runtime_error("Invalid R value");
+    };
+    if (initial_state.S + initial_state.I + initial_state.R !=
+        initial_state.N) {
+      throw std::runtime_error(
+          "Sum of S,I,R doesn't match total number of people");
+    };
+    if (duration_in_days < 0) {
+      throw std::runtime_error("Invalid time duration");
+    };
   }
 
-  
   std::vector<World_state> evolve() const;
-  World_state next(World_state&) const;
+  World_state next(World_state const&) const;
 };
 
 #endif

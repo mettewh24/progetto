@@ -12,13 +12,13 @@ void print(std::vector<World_state> const& state) {
             << std::fixed;
   int size = state.size();
   for (int i = 0; i < size; ++i) {
-    std::cout << std::setprecision(0) << "| " << std::setw(9) << i << " | "
+    std::cout << std::setprecision(0) << "| " << std::setw(9) << i + 1 << " | "
               << std::setw(9) << state[i].S << " | " << std::setw(9)
               << state[i].I << " | " << std::setw(9) << state[i].R << " | "
               << std::setw(9) << state[i].N << " |\n";
   }
-  std::cout
-      << "+-----------+-----------+-----------+-----------+-----------+\n";
+  std::cout << "+-----------+-----------+-----------+-----------+-----------+\n"
+            << state.size();
 }
 
 void print_on_file(std::vector<World_state> const& state) {
@@ -27,12 +27,12 @@ void print_on_file(std::vector<World_state> const& state) {
            "|    Day    |     S     |     I     |     R     |     N     |\n"
            "+-----------+-----------+-----------+-----------+-----------+\n"
         << std::fixed;
-        int size=state.size();
+  int size = state.size();
   for (int i = 0; i < size; ++i) {
-    ostrm << std::setprecision(0) << "| " << std::setw(9) << i << " | "
-              << std::setw(9) << state[i].S << " | " << std::setw(9)
-              << state[i].I << " | " << std::setw(9) << state[i].R << " | "
-              << std::setw(9) << state[i].N << " |\n";
+    ostrm << std::setprecision(0) << "| " << std::setw(9) << i + 1 << " | "
+          << std::setw(9) << state[i].S << " | " << std::setw(9) << state[i].I
+          << " | " << std::setw(9) << state[i].R << " | " << std::setw(9)
+          << state[i].N << " |\n";
   }
   ostrm << "+-----------+-----------+-----------+-----------+-----------+\n";
 
@@ -80,6 +80,11 @@ int main() {
           initial_state.gamma;  // lettura da input dei paramentri dell'epidemia
       break;
   }
+  try {
+    Pandemic sir { initial_state, duration_in_days };
+  } catch (std::runtime_error const& e) {
+    std::cerr << e.what() << '\n';
+  };
 
   Pandemic sir{initial_state, duration_in_days};
   auto a = sir.evolve();

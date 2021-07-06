@@ -13,8 +13,8 @@ World_state approx(World_state& state) {
   double decimals_S = state.S - integral_S;
   double decimals_I = state.I - integral_I;
   auto decimal_sum = decimals_I + decimals_R + decimals_S;
-
-  if (0.9 <= decimal_sum && decimal_sum <= 1.1) {
+  
+  if (decimal_sum <= 1.0001 && decimal_sum >= 0.9999) {
     if (decimals_S > decimals_R && decimals_S > decimals_I) {
       ++integral_S;
     }
@@ -34,7 +34,7 @@ World_state approx(World_state& state) {
       ++integral_R;
     }
   }
-  if (1.9 <= decimal_sum && decimal_sum <= 2.1) {
+  if (decimal_sum <= 2.0001 && decimal_sum >= 1.9999) {
     if (decimals_S > decimals_R or decimals_S > decimals_I) {
       ++integral_S;
     }
@@ -74,31 +74,33 @@ inline bool operator==(World_state const& l, World_state const& r) {
   return alpha;
 };
 
-World_state Pandemic::next(World_state& state)
+World_state Pandemic::next(World_state const& state)
     const  // funzione (return type vector<state>) che fa evolvere allo
            // stadio successivo(mettere nome significativo)
-{
+{ 
+  World_state next_state=state;
   double R = state.R + state.gamma * state.I;
   double S = state.S - state.beta * state.S * state.I * std::pow(state.N, -1);
   double I = state.I + state.beta * state.S * state.I * std::pow(state.N, -1) -
              state.gamma * state.I;
-  state.S = S;
-  state.I = I;
-  state.R = R;
-  state = approx(state);
+  next_state.S = S;
+  next_state.I = I;
+  next_state.R = R;
+  next_state = approx(next_state);
 
-  assert(state.S + state.I + state.R == state.N);//!
+  assert(next_state.S + next_state.I + next_state.R == next_state.N);  //!
 
-  return state;
+  return next_state;
 }
 
 std::vector<World_state> Pandemic::evolve() const {
-  std::vector<World_state> result{
-      p_initial_state};     // result ha già lo stato iniziale come elemento
+  std::vector<World_state> result{};
+  result.push_back(p_initial_state);     // result ha già lo stato iniziale come elemento
   assert(!result.empty());  // Result non vuoto(sennò è errore)
 
-  for (int i = 1; i < p_duration_in_days; ++i) {
-    result.push_back(next(result.back()));
+  for (int i = 1; i <= p_duration_in_days; ++i) {
+    auto a=next(result.back());
+    result.push_back(a);
   }
   return result;
 }
