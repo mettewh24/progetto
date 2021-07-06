@@ -6,30 +6,35 @@
 //#include"pandemic.hpp"
 
 void print(std::vector<World_state> const& state) {
-  std::cout << "+-----------+-----------+-----------+-----------+\n"
-               "|     S     |     I     |     R     |     N     |\n"
-               "+-----------+-----------+-----------+-----------+\n"
+  std::cout << "+-----------+-----------+-----------+-----------+-----------+\n"
+               "|    Day    |     S     |     I     |     R     |     N     |\n"
+               "+-----------+-----------+-----------+-----------+-----------+\n"
             << std::fixed;
-  for (auto& state : state) {
-    std::cout << std::setprecision(0) << "| " << std::setw(9) << state.S
-              << " | " << std::setw(9) << state.I << " | " << std::setw(9)
-              << state.R << " | " << std::setw(9) << state.N << " |\n";
+  int size = state.size();
+  for (int i = 0; i < size; ++i) {
+    std::cout << std::setprecision(0) << "| " << std::setw(9) << i << " | "
+              << std::setw(9) << state[i].S << " | " << std::setw(9)
+              << state[i].I << " | " << std::setw(9) << state[i].R << " | "
+              << std::setw(9) << state[i].N << " |\n";
   }
-  std::cout << "+-----------+-----------+-----------+-----------+\n";
+  std::cout
+      << "+-----------+-----------+-----------+-----------+-----------+\n";
 }
 
 void print_on_file(std::vector<World_state> const& state) {
   std::ofstream ostrm("pandemic.txt");
-  ostrm << "+-----------+-----------+-----------+-----------+\n"
-          "|     S     |     I     |     R     |     N     |\n"
-          "+-----------+-----------+-----------+-----------+\n"
-       << std::fixed;
-  for (auto& state : state) {
-    ostrm << std::setprecision(0) << "| " << std::setw(9) << state.S << " | "
-         << std::setw(9) << state.I << " | " << std::setw(9) << state.R << " | "
-         << std::setw(9) << state.N << " |\n";
+  ostrm << "+-----------+-----------+-----------+-----------+-----------+\n"
+           "|    Day    |     S     |     I     |     R     |     N     |\n"
+           "+-----------+-----------+-----------+-----------+-----------+\n"
+        << std::fixed;
+        int size=state.size();
+  for (int i = 0; i < size; ++i) {
+    ostrm << std::setprecision(0) << "| " << std::setw(9) << i << " | "
+              << std::setw(9) << state[i].S << " | " << std::setw(9)
+              << state[i].I << " | " << std::setw(9) << state[i].R << " | "
+              << std::setw(9) << state[i].N << " |\n";
   }
-  ostrm << "+-----------+-----------+-----------+-----------+\n";
+  ostrm << "+-----------+-----------+-----------+-----------+-----------+\n";
 
   ostrm.close();
 };
@@ -42,9 +47,10 @@ int main() {
   std::cin >> choice_1;
   choice_1 = static_cast<int>(choice_1);
   std::ifstream istrm("data.txt");
-  if (!istrm.is_open() && choice_1==121) {
+  if (!istrm.is_open() && choice_1 == 121) {
     std::cerr << "failed to open data.txt" << '\n';
-    choice_1=110;//il programma va avanti, ma è mandatorio mettere di dati a mano
+    choice_1 =
+        110;  // il programma va avanti, ma è mandatorio mettere di dati a mano
   }
   switch (choice_1) {
     case 110:  // char n(no) risposta a enable read from file
@@ -64,7 +70,7 @@ int main() {
       break;
 
     default:
-       std::cin >> duration_in_days >>
+      std::cin >> duration_in_days >>
           initial_state
               .N;  // lettura da input di durata e grandezza della popolazione
       std::cin >> initial_state.S >> initial_state.I >>

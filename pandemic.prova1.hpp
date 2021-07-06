@@ -14,9 +14,9 @@ struct World_state {
   int N;
 };
 
-World_state approx(World_state& state);
+World_state approx(World_state&);
 
-inline bool operator==(World_state const& l, World_state const& r);
+inline bool operator==(World_state const&, World_state const&);
 
 class Pandemic {
   World_state p_initial_state;
@@ -34,8 +34,9 @@ class Pandemic {
     assert(duration_in_days > 0);  // ha senso metterli qua??
   }
 
-  std::vector<World_state> evolve()
-      const;
+  
+  std::vector<World_state> evolve() const;
+  World_state next(World_state&) const;
 };
 
 #endif
