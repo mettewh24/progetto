@@ -59,7 +59,7 @@ class Pandemic {
 };
 
 
-std::vector<World_state> const evolve(World_state const&, int const&);
+std::vector<World_state>  evolve(World_state const&, int const&);
 World_state const next(World_state const&);
 
 

@@ -1,7 +1,7 @@
+#include <cassert>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
-#include <cassert>
 
 #include "pandemic.prova1.hpp"
 //#include"pandemic.hpp"
@@ -16,10 +16,10 @@ void print(std::vector<World_state> const& state) {
     std::cout << std::setprecision(0) << "| " << std::setw(9) << i << " | "
               << std::setw(9) << state[i].S << " | " << std::setw(9)
               << state[i].I << " | " << std::setw(9) << state[i].R << " | "
-              << std::setw(9) << state[i].N << " |\n";
+              << std::setw(9) << state[i].S + state[i].I + state[i].R << " |\n";
   }
   std::cout << "+-----------+-----------+-----------+-----------+-----------+\n"
-            << state.size();
+            /*<< state.size()*/;
 }
 
 void print_on_file(std::vector<World_state> const& state) {
@@ -30,7 +30,7 @@ void print_on_file(std::vector<World_state> const& state) {
         << std::fixed;
   int size = state.size();
   for (int i = 0; i < size; ++i) {
-    ostrm << std::setprecision(5) << "| " << std::setw(9) << i << " | "
+    ostrm << std::setprecision(0) << "| " << std::setw(9) << i << " | "
           << std::setw(9) << state[i].S << " | " << std::setw(9) << state[i].I
           << " | " << std::setw(9) << state[i].R << " | " << std::setw(9)
           << state[i].N << " |\n";
@@ -81,11 +81,9 @@ int main() {
   };
 
   Pandemic sir{initial_state, duration_in_days};
-  auto a = evolve(sir.get_state(), sir.get_duration());
-  for (int i = 0; i <= a.size(); ++i) {
-    a[i] = approx(a[i]);
-    assert(a[i].S+a[i].I+a[i].R==a[i].N);
-  }
+  std::vector<World_state> a = evolve(sir.get_state(), sir.get_duration());
+
+
 
   char choice_2;
   std::cin >> choice_2;

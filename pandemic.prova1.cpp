@@ -55,11 +55,11 @@ World_state approx(World_state const& state) {
       ++integral_R;
     }
   }
-  if (decimal_sum <= 0.0001) {
+  if (decimal_sum == 0) {
   } else {
-    // regionare su cosa mettere qui
   }
-
+  assert(integral_S+integral_I+integral_R==state_approx.N);
+  
   state_approx.S = integral_S;
   state_approx.I = integral_I;
   state_approx.R = integral_R;  // le parti intere di S I e R
@@ -88,21 +88,19 @@ World_state const next(World_state const& state)
   next_state.S = S;
   next_state.I = I;
   next_state.R = R;
-  // next_state = approx(next_state); rimosso da qui perchè, essendo ricorsivo,
+  next_state = approx(next_state); //rimosso da qui perchè, essendo ricorsivo,
   // l'approssimazione spostava dai dati reali (a lungo termine si raggiungeva
   // uno stato di "stabilità", dove a causa dell'approssimazione un infetto
   // rimaneva sempre tale)
-
-  assert(next_state.S + next_state.I + next_state.R < next_state.N+0.0001 && next_state.S + next_state.I + next_state.R > next_state.N-0.0001);  //!
+  double diff=next_state.S + next_state.I + next_state.R - next_state.N;
+  assert(diff < 0.0001 && diff > -0.0001);  //!
 
   return next_state;
 }
 
-std::vector<World_state> const evolve(World_state const& initial_state,
+std::vector<World_state> evolve(World_state const& initial_state,
                                       int const& duration_in_days) {
-  std::vector<World_state> result{};
-  result.push_back(
-      initial_state);       // result ha già lo stato iniziale come elemento
+  std::vector<World_state> result{initial_state};       // result ha già lo stato iniziale come elemento
   assert(!result.empty());  // Result non vuoto(sennò è errore)
 
   for (int i = 1; i <= duration_in_days; ++i) {
