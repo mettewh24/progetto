@@ -17,7 +17,7 @@ struct World_state {
 
 World_state approx(World_state&);
 
-inline bool operator==(World_state const&, World_state const&);
+bool operator==(World_state const& l, World_state const& r);
 
 class Pandemic {
   World_state p_initial_state;
@@ -26,10 +26,10 @@ class Pandemic {
  public:
   Pandemic(World_state const& initial_state, int duration_in_days)
       : p_initial_state{initial_state}, p_duration_in_days{duration_in_days} {
-    if (initial_state.beta <= 0 || initial_state.beta >= 1) {
+    if (initial_state.beta < 0 || initial_state.beta > 1) {
       throw std::runtime_error("Invalid beta value");
     };
-    if (initial_state.gamma <= 0 || initial_state.gamma >= 1) {
+    if (initial_state.gamma < 0 || initial_state.gamma > 1) {
       throw std::runtime_error("Invalid gamma value");
     };
     if (initial_state.N <= 0) {
@@ -54,8 +54,14 @@ class Pandemic {
     };
   }
 
-  std::vector<World_state> evolve() const;
-  World_state next(World_state const&) const;
+  World_state const& get_state();
+  //World_state get_state(){
+    //return p_initial_state;
+  //}
+  int const get_duration(){
+    return p_duration_in_days;
+  }
 };
-
+std::vector<World_state> const evolve(World_state const&, int);
+World_state const next(World_state const&);
 #endif

@@ -68,14 +68,22 @@ World_state approx(World_state& state) {
   return state;
 }
 
-inline bool operator==(World_state const& l, World_state const& r) {
+ bool operator==(World_state const& l, World_state const& r) {
   bool alpha = l.S == r.S && l.I == r.I && l.R == r.R && l.beta == r.beta &&
                l.gamma == r.gamma && l.N == r.N;
   return alpha;
 };
 
-World_state Pandemic::next(World_state const& state)
-    const  // funzione (return type vector<state>) che fa evolvere allo
+World_state const& Pandemic::get_state(){
+    return p_initial_state;
+  }
+
+int const Pandemic::get_duration(){
+    return p_duration_in_days;
+  }  
+
+World_state const next(World_state const& state)
+      // funzione (return type vector<state>) che fa evolvere allo
            // stadio successivo(mettere nome significativo)
 { 
   World_state next_state=state;
@@ -93,12 +101,12 @@ World_state Pandemic::next(World_state const& state)
   return next_state;
 }
 
-std::vector<World_state> Pandemic::evolve() const {
+std::vector<World_state> const evolve(World_state const& initial_state, int const duration_in_days) {
   std::vector<World_state> result{};
-  result.push_back(p_initial_state);     // result ha già lo stato iniziale come elemento
+  result.push_back(initial_state);     // result ha già lo stato iniziale come elemento
   assert(!result.empty());  // Result non vuoto(sennò è errore)
 
-  for (int i = 1; i <= p_duration_in_days; ++i) {
+  for (int i = 1; i <= duration_in_days; ++i) {
     auto a=next(result.back());
     result.push_back(a);
   }
