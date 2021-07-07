@@ -23,15 +23,16 @@ TEST_CASE("Testing evolve") {
     s1.beta = 1;
 
     Pandemic test0(s0, 1);
-    auto a = next(test0.get_state());
+    auto a = evolve(test0.get_state(),test0.get_duration());
+    a[1]=approx(a[1]);
 
-    CHECK(a == s1);
-    CHECK(a.S == s1.S);
-    CHECK(a.N == s1.N);
-    CHECK(a.I == s1.I);
-    CHECK(a.R == s1.R);
-    CHECK(a.gamma == s1.gamma);
-    CHECK(a.beta == s1.beta);
+    CHECK(a[1] == s1);
+    CHECK(a[1].S == s1.S);
+    CHECK(a[1].N == s1.N);
+    CHECK(a[1].I == s1.I);
+    CHECK(a[1].R == s1.R);
+    CHECK(a[1].gamma == s1.gamma);
+    CHECK(a[1].beta == s1.beta);
   }
 
   SUBCASE("testing exeptions") {
