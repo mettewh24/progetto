@@ -5,7 +5,7 @@
 #include <vector>
 
 World_state approx(World_state const& state) {
-  World_state state_approx=state;
+  World_state state_approx = state;
   int integral_R = static_cast<int>(state_approx.R);
   int integral_S = static_cast<int>(state_approx.S);
   int integral_I = static_cast<int>(state_approx.I);
@@ -14,7 +14,7 @@ World_state approx(World_state const& state) {
   double decimals_S = state_approx.S - integral_S;
   double decimals_I = state_approx.I - integral_I;
   auto decimal_sum = decimals_I + decimals_R + decimals_S;
-  
+
   if (decimal_sum <= 1.0001 && decimal_sum >= 0.9999) {
     if (decimals_S > decimals_R && decimals_S > decimals_I) {
       ++integral_S;
@@ -55,8 +55,9 @@ World_state approx(World_state const& state) {
       ++integral_R;
     }
   }
-  if (decimal_sum == 0) {
-  } else {  
+  if (decimal_sum <= 0.0001) {
+  } else {
+    // regionare su cosa mettere qui
   }
 
   state_approx.S = integral_S;
@@ -65,25 +66,21 @@ World_state approx(World_state const& state) {
   return state_approx;
 }
 
- bool operator==(World_state const& l, World_state const& r) {
+bool operator==(World_state const& l, World_state const& r) {
   bool alpha = l.S == r.S && l.I == r.I && l.R == r.R && l.beta == r.beta &&
                l.gamma == r.gamma && l.N == r.N;
   return alpha;
 };
 
-World_state const& Pandemic::get_state(){
-    return p_initial_state;
-  }
+World_state const& Pandemic::get_state() { return p_initial_state; }
 
-int const& Pandemic::get_duration(){
-    return p_duration_in_days;
-  }  
+int const& Pandemic::get_duration() { return p_duration_in_days; }
 
 World_state const next(World_state const& state)
-      // funzione (return type vector<state>) che fa evolvere allo
-           // stadio successivo(mettere nome significativo)
-{ 
-  World_state next_state=state;
+// funzione (return type vector<state>) che fa evolvere allo
+// stadio successivo(mettere nome significativo)
+{
+  World_state next_state = state;
   double R = state.R + state.gamma * state.I;
   double S = state.S - state.beta * state.S * state.I * std::pow(state.N, -1);
   double I = state.I + state.beta * state.S * state.I * std::pow(state.N, -1) -
@@ -91,20 +88,25 @@ World_state const next(World_state const& state)
   next_state.S = S;
   next_state.I = I;
   next_state.R = R;
-  next_state = approx(next_state);
+  // next_state = approx(next_state); rimosso da qui perchè, essendo ricorsivo,
+  // l'approssimazione spostava dai dati reali (a lungo termine si raggiungeva
+  // uno stato di "stabilità", dove a causa dell'approssimazione un infetto
+  // rimaneva sempre tale)
 
-  assert(next_state.S + next_state.I + next_state.R == next_state.N);  //!
+  assert(next_state.S + next_state.I + next_state.R < next_state.N+0.0001 && next_state.S + next_state.I + next_state.R > next_state.N-0.0001);  //!
 
   return next_state;
 }
 
-std::vector<World_state> const evolve(World_state const& initial_state, int const& duration_in_days) {
+std::vector<World_state> const evolve(World_state const& initial_state,
+                                      int const& duration_in_days) {
   std::vector<World_state> result{};
-  result.push_back(initial_state);     // result ha già lo stato iniziale come elemento
+  result.push_back(
+      initial_state);       // result ha già lo stato iniziale come elemento
   assert(!result.empty());  // Result non vuoto(sennò è errore)
 
   for (int i = 1; i <= duration_in_days; ++i) {
-    auto a=next(result.back());
+    auto a = next(result.back());
     result.push_back(a);
   }
   return result;

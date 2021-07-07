@@ -1,6 +1,7 @@
 #include <fstream>
 #include <iomanip>
 #include <iostream>
+#include <cassert>
 
 #include "pandemic.prova1.hpp"
 //#include"pandemic.hpp"
@@ -12,7 +13,7 @@ void print(std::vector<World_state> const& state) {
             << std::fixed;
   int size = state.size();
   for (int i = 0; i < size; ++i) {
-    std::cout << std::setprecision(0) << "| " << std::setw(9) << i  << " | "
+    std::cout << std::setprecision(0) << "| " << std::setw(9) << i << " | "
               << std::setw(9) << state[i].S << " | " << std::setw(9)
               << state[i].I << " | " << std::setw(9) << state[i].R << " | "
               << std::setw(9) << state[i].N << " |\n";
@@ -29,7 +30,7 @@ void print_on_file(std::vector<World_state> const& state) {
         << std::fixed;
   int size = state.size();
   for (int i = 0; i < size; ++i) {
-    ostrm << std::setprecision(0) << "| " << std::setw(9) << i + 1 << " | "
+    ostrm << std::setprecision(5) << "| " << std::setw(9) << i << " | "
           << std::setw(9) << state[i].S << " | " << std::setw(9) << state[i].I
           << " | " << std::setw(9) << state[i].R << " | " << std::setw(9)
           << state[i].N << " |\n";
@@ -45,22 +46,19 @@ int main() {
 
   char choice_1;
   std::cin >> choice_1;
-  choice_1 = static_cast<int>(choice_1);
+
   std::ifstream istrm("data.txt");
-  if (!istrm.is_open() && choice_1 == 121) {
+  if (!istrm.is_open() && choice_1 == 'y') {
     std::cerr << "failed to open data.txt" << '\n';
     choice_1 =
-        110;  // il programma va avanti, ma è mandatorio mettere di dati a mano
+        'n';  // il programma va avanti, ma è mandatorio mettere di dati a mano
   }
+  choice_1 = static_cast<int>(choice_1);
+
   switch (choice_1) {
     case 110:  // char n(no) risposta a enable read from file
-      std::cin >> duration_in_days >>
-          initial_state
-              .N;  // lettura da input di durata e grandezza della popolazione
-      std::cin >> initial_state.S >> initial_state.I >>
-          initial_state
-              .R;  // lettura da input della ripartizione della popolazione
-      std::cin >> initial_state.beta >>
+      std::cin >> duration_in_days >> initial_state.N >> initial_state.S >>
+          initial_state.I >> initial_state.R >> initial_state.beta >>
           initial_state.gamma;  // lettura da input dei paramentri dell'epidemia
       break;
     case 121:  // char y(yes)
@@ -70,13 +68,8 @@ int main() {
       break;
 
     default:
-      std::cin >> duration_in_days >>
-          initial_state
-              .N;  // lettura da input di durata e grandezza della popolazione
-      std::cin >> initial_state.S >> initial_state.I >>
-          initial_state
-              .R;  // lettura da input della ripartizione della popolazione
-      std::cin >> initial_state.beta >>
+      std::cin >> duration_in_days >> initial_state.N >> initial_state.S >>
+          initial_state.I >> initial_state.R >> initial_state.beta >>
           initial_state.gamma;  // lettura da input dei paramentri dell'epidemia
       break;
   }
@@ -89,6 +82,10 @@ int main() {
 
   Pandemic sir{initial_state, duration_in_days};
   auto a = evolve(sir.get_state(), sir.get_duration());
+  for (int i = 0; i <= a.size(); ++i) {
+    a[i] = approx(a[i]);
+    assert(a[i].S+a[i].I+a[i].R==a[i].N);
+  }
 
   char choice_2;
   std::cin >> choice_2;
