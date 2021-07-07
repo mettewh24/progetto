@@ -78,7 +78,7 @@ World_state const& Pandemic::get_state(){
     return p_initial_state;
   }
 
-int const Pandemic::get_duration(){
+int const& Pandemic::get_duration(){
     return p_duration_in_days;
   }  
 
@@ -101,7 +101,7 @@ World_state const next(World_state const& state)
   return next_state;
 }
 
-std::vector<World_state> const evolve(World_state const& initial_state, int const duration_in_days) {
+std::vector<World_state> const evolve(World_state const& initial_state, int const& duration_in_days) {
   std::vector<World_state> result{};
   result.push_back(initial_state);     // result ha già lo stato iniziale come elemento
   assert(!result.empty());  // Result non vuoto(sennò è errore)

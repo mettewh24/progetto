@@ -58,10 +58,8 @@ class Pandemic {
   //World_state get_state(){
     //return p_initial_state;
   //}
-  int const get_duration(){
-    return p_duration_in_days;
-  }
+  int const& get_duration();
 };
-std::vector<World_state> const evolve(World_state const&, int);
+std::vector<World_state> const evolve(World_state const&, int const&);
 World_state const next(World_state const&);
 #endif

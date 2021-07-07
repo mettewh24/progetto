@@ -12,7 +12,7 @@ void print(std::vector<World_state> const& state) {
             << std::fixed;
   int size = state.size();
   for (int i = 0; i < size; ++i) {
-    std::cout << std::setprecision(0) << "| " << std::setw(9) << i + 1 << " | "
+    std::cout << std::setprecision(0) << "| " << std::setw(9) << i  << " | "
               << std::setw(9) << state[i].S << " | " << std::setw(9)
               << state[i].I << " | " << std::setw(9) << state[i].R << " | "
               << std::setw(9) << state[i].N << " |\n";
@@ -80,14 +80,15 @@ int main() {
           initial_state.gamma;  // lettura da input dei paramentri dell'epidemia
       break;
   }
+
   try {
-    Pandemic sir { initial_state, duration_in_days };
+    Pandemic sir{initial_state, duration_in_days};
   } catch (std::runtime_error const& e) {
     std::cerr << e.what() << '\n';
   };
 
   Pandemic sir{initial_state, duration_in_days};
-  auto a = sir.evolve();
+  auto a = evolve(sir.get_state(), sir.get_duration());
 
   char choice_2;
   std::cin >> choice_2;
