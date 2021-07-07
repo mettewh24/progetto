@@ -4,15 +4,15 @@
 
 #include "doctest.h"
 
-TEST_CASE("Testing evolve") {
-  SUBCASE("testing evolve") {
-    World_state s0{};
-    s0.S = 99;
+TEST_CASE("Testing") {
+  SUBCASE("testing evolve 1") {
+    World_state s0{99,1,0,1,1,100};
+    /*s0.S = 99;
     s0.I = 1;
     s0.R = 0;
     s0.N = 100;
     s0.gamma = 1;
-    s0.beta = 1;
+    s0.beta = 1;*/
 
     World_state s1{};
     s1.S = 98;
