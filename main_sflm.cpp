@@ -1,11 +1,10 @@
-#include<iostream>
-#include <SFML/Graphics.hpp>
-#include <iomanip>
+#include <cassert>
 #include <fstream>
+#include <iomanip>
+#include <iostream>
 
 #include "pandemic.prova1.hpp"
 //#include"pandemic.hpp"
-
 
 void print(std::vector<World_state> const& state) {
   std::cout << "+-----------+-----------+-----------+-----------+-----------+\n"
@@ -17,10 +16,10 @@ void print(std::vector<World_state> const& state) {
     std::cout << std::setprecision(0) << "| " << std::setw(9) << i << " | "
               << std::setw(9) << state[i].S << " | " << std::setw(9)
               << state[i].I << " | " << std::setw(9) << state[i].R << " | "
-              << std::setw(9) << state[i].N << " |\n";
+              << std::setw(9) << state[i].S + state[i].I + state[i].R << " |\n";
   }
-  std::cout
-      << "+-----------+-----------+-----------+-----------+-----------+\n";
+  std::cout << "+-----------+-----------+-----------+-----------+-----------+\n"
+      /*<< state.size()*/;
 }
 
 void print_on_file(std::vector<World_state> const& state) {
@@ -29,12 +28,12 @@ void print_on_file(std::vector<World_state> const& state) {
            "|    Day    |     S     |     I     |     R     |     N     |\n"
            "+-----------+-----------+-----------+-----------+-----------+\n"
         << std::fixed;
-        int size=state.size();
+  int size = state.size();
   for (int i = 0; i < size; ++i) {
     ostrm << std::setprecision(0) << "| " << std::setw(9) << i << " | "
-              << std::setw(9) << state[i].S << " | " << std::setw(9)
-              << state[i].I << " | " << std::setw(9) << state[i].R << " | "
-              << std::setw(9) << state[i].N << " |\n";
+          << std::setw(9) << state[i].S << " | " << std::setw(9) << state[i].I
+          << " | " << std::setw(9) << state[i].R << " | " << std::setw(9)
+          << state[i].N << " |\n";
   }
   ostrm << "+-----------+-----------+-----------+-----------+-----------+\n";
 
@@ -47,22 +46,19 @@ int main() {
 
   char choice_1;
   std::cin >> choice_1;
-  choice_1 = static_cast<int>(choice_1);
+
   std::ifstream istrm("data.txt");
-  if (!istrm.is_open() && choice_1 == 121) {
+  if (!istrm.is_open() && choice_1 == 'y') {
     std::cerr << "failed to open data.txt" << '\n';
     choice_1 =
-        110;  // il programma va avanti, ma è mandatorio mettere di dati a mano
+        'n';  // il programma va avanti, ma è mandatorio mettere di dati a mano
   }
+  choice_1 = static_cast<int>(choice_1);
+
   switch (choice_1) {
     case 110:  // char n(no) risposta a enable read from file
-      std::cin >> duration_in_days >>
-          initial_state
-              .N;  // lettura da input di durata e grandezza della popolazione
-      std::cin >> initial_state.S >> initial_state.I >>
-          initial_state
-              .R;  // lettura da input della ripartizione della popolazione
-      std::cin >> initial_state.beta >>
+      std::cin >> duration_in_days >> initial_state.N >> initial_state.S >>
+          initial_state.I >> initial_state.R >> initial_state.beta >>
           initial_state.gamma;  // lettura da input dei paramentri dell'epidemia
       break;
     case 121:  // char y(yes)
@@ -72,19 +68,24 @@ int main() {
       break;
 
     default:
-      std::cin >> duration_in_days >>
-          initial_state
-              .N;  // lettura da input di durata e grandezza della popolazione
-      std::cin >> initial_state.S >> initial_state.I >>
-          initial_state
-              .R;  // lettura da input della ripartizione della popolazione
-      std::cin >> initial_state.beta >>
+      std::cin >> duration_in_days >> initial_state.N >> initial_state.S >>
+          initial_state.I >> initial_state.R >> initial_state.beta >>
           initial_state.gamma;  // lettura da input dei paramentri dell'epidemia
       break;
   }
 
+  try {
+    Pandemic sir{initial_state, duration_in_days};
+  } catch (std::runtime_error const& e) {
+    std::cerr << e.what() << '\n';
+  };
+
   Pandemic sir{initial_state, duration_in_days};
-  auto a = sir.evolve();
+  std::vector<World_state> a = evolve(sir.get_state(), sir.get_duration());
+  for (int i = 0; i <= duration_in_days; ++i) {
+    World_state b = approx(a[i]);
+    assert(b.S + b.I + b.R - b.N == 0);
+  }
 
   char choice_2;
   std::cin >> choice_2;
