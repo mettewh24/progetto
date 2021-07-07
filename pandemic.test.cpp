@@ -1,5 +1,6 @@
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
-#include "pandemic.hpp"
+//#include "pandemic.hpp"
+#include "pandemic.prova1.hpp"
 
 #include "doctest.h"
 
@@ -14,38 +15,38 @@ TEST_CASE("Testing evolve") {
     s0.beta = 1;
 
     World_state s1{};
-    s1.S = round(98.01);
-    s1.I = round(0.99);
+    s1.S = 98;
+    s1.I = 1;
     s1.R = 1;
     s1.N = 100;
     s1.gamma = 1;
     s1.beta = 1;
 
     Pandemic test0(s0, 1);
-    auto a = test0.evolve();
+    auto a = next(test0.get_state());
 
-    CHECK(a.back() == s1);  // devo definire l'operatore == per due World state
-    CHECK(a.back().S == s1.S);
-    CHECK(a.back().N == s1.N);
-    CHECK(a.back().I == s1.I);
-    CHECK(a.back().R == s1.R);
-    CHECK(a.back().gamma == s1.gamma);
-    CHECK(a.back().beta == s1.beta);
+    CHECK(a == s1);
+    CHECK(a.S == s1.S);
+    CHECK(a.N == s1.N);
+    CHECK(a.I == s1.I);
+    CHECK(a.R == s1.R);
+    CHECK(a.gamma == s1.gamma);
+    CHECK(a.beta == s1.beta);
   }
 
-  SUBCASE("testing asserts") {
+  SUBCASE("testing exeptions") {
     World_state s0{};
     s0.S = 0;
     s0.I = 0;
-    s0.R = 0;
-    s0.N = 0;
-    s0.gamma = -1;
-    s0.beta = -100;
+    s0.R = 10;
+    s0.N = 10;
+    s0.gamma = 5;
+    s0.beta = 0;
 
     World_state s1{};
     s1.S = 1;
-    s1.I = -1;
-    s1.R = 100;
+    s1.I = 0;
+    s1.R = 98;
     s1.N = 100;
     s1.gamma = 1;
     s1.beta = 1;
