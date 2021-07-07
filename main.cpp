@@ -19,7 +19,7 @@ void print(std::vector<World_state> const& state) {
               << std::setw(9) << state[i].S + state[i].I + state[i].R << " |\n";
   }
   std::cout << "+-----------+-----------+-----------+-----------+-----------+\n"
-            /*<< state.size()*/;
+      /*<< state.size()*/;
 }
 
 void print_on_file(std::vector<World_state> const& state) {
@@ -82,8 +82,10 @@ int main() {
 
   Pandemic sir{initial_state, duration_in_days};
   std::vector<World_state> a = evolve(sir.get_state(), sir.get_duration());
-
-
+  for (int i = 0; i <= duration_in_days; ++i) {
+    World_state b = approx(a[i]);
+    assert(b.S + b.I + b.R - b.N == 0);
+  }
 
   char choice_2;
   std::cin >> choice_2;

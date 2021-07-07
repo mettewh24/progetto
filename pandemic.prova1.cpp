@@ -88,7 +88,7 @@ World_state const next(World_state const& state)
   next_state.S = S;
   next_state.I = I;
   next_state.R = R;
-  next_state = approx(next_state); //rimosso da qui perchè, essendo ricorsivo,
+  //next_state = approx(next_state); //rimosso da qui perchè, essendo ricorsivo,
   // l'approssimazione spostava dai dati reali (a lungo termine si raggiungeva
   // uno stato di "stabilità", dove a causa dell'approssimazione un infetto
   // rimaneva sempre tale)
