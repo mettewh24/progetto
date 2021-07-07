@@ -58,8 +58,8 @@ World_state approx(World_state const& state) {
   if (decimal_sum == 0) {
   } else {
   }
-  assert(integral_S+integral_I+integral_R==state_approx.N);
-  
+  assert(integral_S + integral_I + integral_R == state_approx.N);
+
   state_approx.S = integral_S;
   state_approx.I = integral_I;
   state_approx.R = integral_R;  // le parti intere di S I e R
@@ -76,9 +76,8 @@ World_state const& Pandemic::get_state() { return p_initial_state; }
 
 int const& Pandemic::get_duration() { return p_duration_in_days; }
 
-World_state const next(World_state const& state)
-// funzione (return type vector<state>) che fa evolvere allo
-// stadio successivo(mettere nome significativo)
+World_state const next(
+    World_state const& state)  // function that computes the next state
 {
   World_state next_state = state;
   double R = state.R + state.gamma * state.I;
@@ -88,19 +87,21 @@ World_state const next(World_state const& state)
   next_state.S = S;
   next_state.I = I;
   next_state.R = R;
-  //next_state = approx(next_state); //rimosso da qui perchè, essendo ricorsivo,
+  // next_state = approx(next_state) rimosso da qui perchè, essendo
+  // ricorsivo,
   // l'approssimazione spostava dai dati reali (a lungo termine si raggiungeva
   // uno stato di "stabilità", dove a causa dell'approssimazione un infetto
   // rimaneva sempre tale)
-  double diff=next_state.S + next_state.I + next_state.R - next_state.N;
+  double diff = next_state.S + next_state.I + next_state.R - next_state.N;
   assert(diff < 0.0001 && diff > -0.0001);  //!
 
   return next_state;
 }
 
 std::vector<World_state> evolve(World_state const& initial_state,
-                                      int const& duration_in_days) {
-  std::vector<World_state> result{initial_state};       // result ha già lo stato iniziale come elemento
+                                int const& duration_in_days) {
+  std::vector<World_state> result{
+      initial_state};       // result ha già lo stato iniziale come elemento
   assert(!result.empty());  // Result non vuoto(sennò è errore)
 
   for (int i = 1; i <= duration_in_days; ++i) {
