@@ -15,7 +15,7 @@ struct World_state {
   int N;
 };
 
-World_state approx(World_state&);
+World_state approx(World_state const&);
 
 bool operator==(World_state const& l, World_state const& r);
 
@@ -55,11 +55,12 @@ class Pandemic {
   }
 
   World_state const& get_state();
-  //World_state get_state(){
-    //return p_initial_state;
-  //}
   int const& get_duration();
 };
+
+
 std::vector<World_state> const evolve(World_state const&, int const&);
 World_state const next(World_state const&);
+
+
 #endif

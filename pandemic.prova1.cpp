@@ -4,14 +4,15 @@
 #include <cmath>
 #include <vector>
 
-World_state approx(World_state& state) {
-  int integral_R = static_cast<int>(state.R);
-  int integral_S = static_cast<int>(state.S);
-  int integral_I = static_cast<int>(state.I);
+World_state approx(World_state const& state) {
+  World_state state_approx=state;
+  int integral_R = static_cast<int>(state_approx.R);
+  int integral_S = static_cast<int>(state_approx.S);
+  int integral_I = static_cast<int>(state_approx.I);
 
-  double decimals_R = state.R - integral_R;
-  double decimals_S = state.S - integral_S;
-  double decimals_I = state.I - integral_I;
+  double decimals_R = state_approx.R - integral_R;
+  double decimals_S = state_approx.S - integral_S;
+  double decimals_I = state_approx.I - integral_I;
   auto decimal_sum = decimals_I + decimals_R + decimals_S;
   
   if (decimal_sum <= 1.0001 && decimal_sum >= 0.9999) {
@@ -55,17 +56,13 @@ World_state approx(World_state& state) {
     }
   }
   if (decimal_sum == 0) {
-  } else {  // è solo uno strumeto di controllo che i nostri decimali rientirno
-            // in uno dei tre casi sopra, va tolto in consegna del progetto
-    state.I = 0;
-    state.S = 0;
-    state.R = 0;
+  } else {  
   }
 
-  state.S = integral_S;
-  state.I = integral_I;
-  state.R = integral_R;  // le parti intere di S I e R
-  return state;
+  state_approx.S = integral_S;
+  state_approx.I = integral_I;
+  state_approx.R = integral_R;  // le parti intere di S I e R
+  return state_approx;
 }
 
  bool operator==(World_state const& l, World_state const& r) {
