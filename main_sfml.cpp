@@ -5,11 +5,9 @@
 #include <SFML/Graphics.hpp>
 #include <sstream>
 #include <cmath>
-//#include <SelbaWard/PieChart.hpp>
 #include <SFML/OpenGL.hpp>
 
 
-using namespace std;
 
 #include "pandemic.prova1.hpp"
 //#include"pandemic.hpp"
@@ -26,8 +24,7 @@ void print(std::vector<World_state> const& state) {
               << state[i].I << " | " << std::setw(9) << state[i].R << " | "
               << std::setw(9) << state[i].S + state[i].I + state[i].R << " |\n";
   }
-  std::cout << "+-----------+-----------+-----------+-----------+-----------+\n"
-      /*<< state.size()*/;
+  std::cout << "+-----------+-----------+-----------+-----------+-----------+\n";
 }
 
 void print_on_file(std::vector<World_state> const& state) {
@@ -118,16 +115,17 @@ int main() {
       break;
   }
     
-    //grafico S asse x e giorni asse y
+    /*//grafico S asse x giorni e  asse y
     sf::RenderWindow window(sf::VideoMode(200, 200), "Graph of S");
     window.setVerticalSyncEnabled(true);
     window.setFramerateLimit(60);
 
     sf::VertexArray chart(sf::LinesStrip, duration_in_days);
-    for (unsigned int i = 0; i <= duration_in_days; ++i){
+    for ( int i = 0; i <= duration_in_days; ++i){
         unsigned int x = i;
-        unsigned int y = a[i].S;
-        chart.append(sf::Vertex(sf::Vector2f(x, y), sf::Color::Blue));
+        int b=a[i].S;
+        unsigned int y = b;
+        chart.append(sf::Vertex(sf::Vector2f(x, y), sf::Color::Red));
     }
 
     while (window.isOpen())
@@ -136,41 +134,10 @@ int main() {
         while (window.pollEvent(event))
             if (event.type == sf::Event::Closed) window.close();
 
-        window.clear(sf::Color::Yellow);
+        window.clear(sf::Color::White);
         window.draw(chart);
         window.display();
     }
     return 0;
-
-
-  /*double percentage_S_lastday = state[size-1].S * pow(state[size-1].S + state[size-1].I + state[size-1].R, -1);
-  double percentage_I_lastday = state[size-1].I * pow(state[size-1].S + state[size-1].I + state[size-1].R, -1);
-  double percentage_R_lastday = state[size-1].R * pow(state[size-1].S + state[size-1].I + state[size-1].R, -1);
-    
-    sf::RenderWindow window(sf::VideoMode(200, 200), "Pie Chart of the last day");
-    sw::PieChart pieChart;
-    pieChart.slices.resize(3);
-    pieChart.slices[0].color = sf::Color::Red;
-    pieChart.slices[1].color = sf::Color::Green;
-    pieChart.slices[2].color = sf::Color::Blue;
-    pieChart.slices[0].size = (percentage_S_lastday)f; //ma così non funziona, vuole un numero
-    pieChart.slices[1].size = (percentage_S_lastday)f;
-    pieChart.slices[2].size = (percentage_S_lastday)f;
-    pieChart.setSize({ 150.f, 150.f });
-    pieChart.update();
-    pieChart.setOrigin(pieChart.getSize() / 2.f);
-    pieChart.setPosition(window.getView().getCenter());
-    while (window.isOpen())
-    {
-        sf::Event event;
-        while (window.pollEvent(event))
-        {
-            if (event.type == sf::Event::Closed)
-                window.close();
-        }
-        window.clear();
-        window.draw(pieChart);
-        window.display();
-    }
-    return EXIT_SUCCESS;*/
+*/
 }
