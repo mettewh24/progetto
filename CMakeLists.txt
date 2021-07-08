@@ -11,5 +11,5 @@ target_compile_options(pandemic.minimal PRIVATE -Wall -Wextra)
 add_executable(pandemic.t pandemic.prova1.cpp pandemic.test.cpp)
 target_compile_options(pandemic.t PRIVATE -Wall -Wextra -fsanitize=address)
 target_link_options(pandemic.t PRIVATE -fsanitize=address)
-add_test(NAME world.t COMMAND world.t)
+
   
