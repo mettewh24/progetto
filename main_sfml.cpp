@@ -5,7 +5,7 @@
 #include <SFML/Graphics.hpp>
 #include <sstream>
 #include <cmath>
-#include <SFML/OpenGL.hpp>
+//#include <SFML/OpenGL.hpp>
 
 
 
@@ -115,15 +115,20 @@ int main() {
       break;
   }
     
-    /*//grafico S asse x giorni e  asse y
-    sf::RenderWindow window(sf::VideoMode(200, 200), "Graph of S");
+    //grafico S asse y giorni asse x
+    sf::RenderWindow window(sf::VideoMode(600, 600), "Graph of S");
     window.setVerticalSyncEnabled(true);
     window.setFramerateLimit(60);
+    /*sf::VertexArray lines(sf::LineStrip, 4);
+    lines[0].position = sf::Vector2f(10, 0);
+    lines[1].position = sf::Vector2f(20, 0);
+    lines[2].position = sf::Vector2f(30, 5);
+    lines[3].position = sf::Vector2f(40, 2);*/ //prova con delle linee, non funzionano neanche loro
 
     sf::VertexArray chart(sf::LinesStrip, duration_in_days);
     for ( int i = 0; i <= duration_in_days; ++i){
         unsigned int x = i;
-        int b=a[i].S;
+        int b = 3;
         unsigned int y = b;
         chart.append(sf::Vertex(sf::Vector2f(x, y), sf::Color::Red));
     }
@@ -139,5 +144,5 @@ int main() {
         window.display();
     }
     return 0;
-*/
+
 }
