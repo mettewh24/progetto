@@ -25,13 +25,13 @@ World_state approx(World_state const& state) {
     if (decimals_R > decimals_S && decimals_R > decimals_I) {
       ++integral_R;
     }
-    if (decimals_S == decimals_I && decimals_S == .5) {
+    if (std::abs(decimals_S - decimals_I)<0.0000001 && decimals_S == .5) {
       ++integral_S;
     }
-    if (decimals_I == decimals_R && decimals_I == .5) {
+    if (std::abs(decimals_I - decimals_R)<0.0000001 && decimals_I == .5) {
       ++integral_I;
     }
-    if (decimals_R == decimals_S && decimals_R == .5) {
+    if (std::abs(decimals_R - decimals_S)<0.0000001 && decimals_R == .5) {
       ++integral_R;
     }
   }
@@ -45,13 +45,13 @@ World_state approx(World_state const& state) {
     if (decimals_R > decimals_S or decimals_R > decimals_I) {
       ++integral_R;
     }
-    if (decimals_S == decimals_I && decimals_S < decimals_R) {
+    if (std::abs(decimals_S - decimals_I)<0.0000001 && decimals_S < decimals_R) {
       ++integral_S;
     }
-    if (decimals_I == decimals_R && decimals_I < decimals_S) {
+    if (std::abs(decimals_I - decimals_R)<0.0000001 && decimals_I < decimals_S) {
       ++integral_I;
     }
-    if (decimals_R == decimals_S && decimals_R < decimals_I) {
+    if (std::abs(decimals_R -decimals_S)<0.0000001 && decimals_R < decimals_I) {
       ++integral_R;
     }
   }
