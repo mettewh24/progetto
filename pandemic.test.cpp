@@ -10,9 +10,9 @@ TEST_CASE("Testing") {
     /*s0.S = 99;
     s0.I = 1;
     s0.R = 0;
-    s0.N = 100;
+    s0.beta = 1;
     s0.gamma = 1;
-    s0.beta = 1;*/
+    s0.N = 100;*/
 
     World_state s1{};
     s1.S = 98;
@@ -47,7 +47,7 @@ TEST_CASE("Testing") {
     World_state s04{137172,2894,9984,0.5,0.6,150050};
 
     World_state s05{135849,2481,11720,0.5,0.6,150050};
-    
+
 
     Pandemic test00(s00, 1);
     auto b = evolve(test00.get_state(),test00.get_duration());
