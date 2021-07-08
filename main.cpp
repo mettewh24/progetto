@@ -83,8 +83,8 @@ int main() {
   Pandemic sir{initial_state, duration_in_days};
   std::vector<World_state> a = evolve(sir.get_state(), sir.get_duration());
   for (int i = 0; i <= duration_in_days; ++i) {
-    World_state b = approx(a[i]);
-    assert(b.S + b.I + b.R - b.N == 0);
+    a[i] = approx(a[i]);
+    assert(a[i].S + a[i].I + a[i].R - a[i].N == 0);
   }
 
   char choice_2;

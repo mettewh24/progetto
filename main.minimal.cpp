@@ -35,7 +35,10 @@ int main() {
   };
 
   Pandemic sir{initial_state, duration_in_days};
-  auto a = evolve(sir.get_state(), sir.get_duration());
-
+  std::vector<World_state> a = evolve(sir.get_state(), sir.get_duration());
+  for (int i = 0; i <= duration_in_days; ++i) {
+    a[i] = approx(a[i]);
+    assert(a[i].S + a[i].I + a[i].R - a[i].N == 0);
+  }
   print(a);
 }
