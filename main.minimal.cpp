@@ -2,7 +2,7 @@
 #include <iomanip>
 #include <iostream>
 
-#include "pandemic.prova1.hpp"
+#include "pandemic.hpp"
 //#include"pandemic.hpp"
 
 void print(std::vector<World_state> const& state) {

@@ -4,8 +4,8 @@
 #include <iomanip>
 #include <iostream>
 
-#include "pandemic.prova1.hpp"
-//#include"pandemic.hpp"
+#include "pandemic.hpp"
+
 int number_of_digits(int const number) {
   int i = 1;
   int N = number;

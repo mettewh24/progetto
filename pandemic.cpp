@@ -1,4 +1,4 @@
-#include "pandemic.prova1.hpp"
+#include "pandemic.hpp"
 
 #include <cassert>
 #include <cmath>
