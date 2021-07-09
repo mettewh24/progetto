@@ -118,21 +118,21 @@ int main() {
     choice_1 = 'n';  // il programma va avanti, ma è mandatorio mettere di
                      // dati a mano
   }
-  choice_1 = static_cast<int>(choice_1);
 
   switch (choice_1) {
-    case 110:  // char n(no) risposta a enable read from file
+    case 'n':  // char n(no) risposta a enable read from file
       std::cin >> duration_in_days >> initial_state.N >> initial_state.S >>
           initial_state.I >> initial_state.R >> initial_state.beta >>
           initial_state.gamma;  // lettura da input dei paramentri dell'epidemia
       break;
-    case 121:  // char y(yes)
+    case 'y':  // char y(yes)
       istrm >> duration_in_days >> initial_state.N >> initial_state.S >>
           initial_state.I >> initial_state.R >> initial_state.beta >>
           initial_state.gamma;
       break;
 
     default:
+      std::cerr << "Invalid char, insert data:" << '\n';
       std::cin >> duration_in_days >> initial_state.N >> initial_state.S >>
           initial_state.I >> initial_state.R >> initial_state.beta >>
           initial_state.gamma;  // lettura da input dei paramentri dell'epidemia
@@ -154,29 +154,29 @@ int main() {
 
   char choice_2;
   std::cin >> choice_2;
-  choice_2 = static_cast<int>(choice_2);
   switch (choice_2) {
-    case 110:  // corrisponde al char n(no)
+    case 'n':  // corrisponde al char n(no)
       print::print(a);
       break;
 
-    case 97:  // corrisponde al char a (all)
+    case 'a':  // corrisponde al char a (all)
       print::print(a);
       print_on_file::print_on_file(a);
       break;
 
-    case 121:  // corrisponde al char y (yes)
+    case 'y':  // corrisponde al char y (yes)
       print_on_file::print_on_file(a);
       break;
 
     default:
+      std::cerr << "Invalid char" << '\n';
       print::print(a);
       print_on_file::print_on_file(a);
       break;
   }
 
-  auto ciao=a;  
-  for (char choice_3 = 'y';choice_3 == 'y';) {
+  auto ciao = a;
+  for (char choice_3 = 'y'; choice_3 == 'y';) {
     std::cin >> choice_3;
     if (choice_3 == 121) {
       int start;
@@ -185,8 +185,7 @@ int main() {
       double gamma;
       std::cin >> start >> new_duration_in_days >> beta >> gamma;
 
-       ciao = evolve(ciao, start,
-                      new_duration_in_days, beta, gamma);
+      ciao = evolve(ciao, start, new_duration_in_days, beta, gamma);
       for (int i = 0; i < static_cast<int>(ciao.size()); ++i) {
         ciao[i] = approx(ciao[i]);
         assert(ciao[i].S + ciao[i].I + ciao[i].R - ciao[i].N == 0);
