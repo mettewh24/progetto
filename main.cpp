@@ -18,7 +18,8 @@ void print(std::vector<World_state> const& state) {
               << state[i].I << " | " << std::setw(9) << state[i].R << " | "
               << std::setw(9) << state[i].S + state[i].I + state[i].R << " |\n";
   }
-  std::cout << "+-----------+-----------+-----------+-----------+-----------+\n";
+  std::cout
+      << "+-----------+-----------+-----------+-----------+-----------+\n";
 }
 
 void print_on_file(std::vector<World_state> const& state) {
@@ -108,4 +109,17 @@ int main() {
       print_on_file(a);
       break;
   }
+
+  int start;
+  int new_duration_in_days;
+  double beta;
+  double gamma;
+  std::cin >> start >> new_duration_in_days >> beta >> gamma;
+  auto b = evolve(evolve(sir.get_state(), sir.get_duration()), start,
+                  new_duration_in_days, beta, gamma);
+  for (int i = 0; i < duration_in_days; ++i) {
+    b[i] = approx(b[i]);
+    assert(b[i].S + b[i].I + b[i].R - b[i].N == 0);
+  }
+  print(b);
 }

@@ -25,13 +25,13 @@ World_state approx(World_state const& state) {
     if (decimals_R > decimals_S && decimals_R > decimals_I) {
       ++integral_R;
     }
-    if (std::abs(decimals_S - decimals_I)<0.0000001 && decimals_S == .5) {
+    if (std::abs(decimals_S - decimals_I) < 0.0000001 && decimals_S == .5) {
       ++integral_S;
     }
-    if (std::abs(decimals_I - decimals_R)<0.0000001 && decimals_I == .5) {
+    if (std::abs(decimals_I - decimals_R) < 0.0000001 && decimals_I == .5) {
       ++integral_I;
     }
-    if (std::abs(decimals_R - decimals_S)<0.0000001 && decimals_R == .5) {
+    if (std::abs(decimals_R - decimals_S) < 0.0000001 && decimals_R == .5) {
       ++integral_R;
     }
   }
@@ -45,13 +45,16 @@ World_state approx(World_state const& state) {
     if (decimals_R > decimals_S or decimals_R > decimals_I) {
       ++integral_R;
     }
-    if (std::abs(decimals_S - decimals_I)<0.0000001 && decimals_S < decimals_R) {
+    if (std::abs(decimals_S - decimals_I) < 0.0000001 &&
+        decimals_S < decimals_R) {
       ++integral_S;
     }
-    if (std::abs(decimals_I - decimals_R)<0.0000001 && decimals_I < decimals_S) {
+    if (std::abs(decimals_I - decimals_R) < 0.0000001 &&
+        decimals_I < decimals_S) {
       ++integral_I;
     }
-    if (std::abs(decimals_R -decimals_S)<0.0000001 && decimals_R < decimals_I) {
+    if (std::abs(decimals_R - decimals_S) < 0.0000001 &&
+        decimals_R < decimals_I) {
       ++integral_R;
     }
   }
@@ -107,6 +110,33 @@ std::vector<World_state> evolve(World_state const& initial_state,
   for (int i = 1; i <= duration_in_days; ++i) {
     auto a = next(result.back());
     result.push_back(a);
+  }
+  return result;
+}
+
+std::vector<World_state> evolve(std::vector<World_state> states, int start,
+                                int new_duration_in_days, double beta,
+                                double gamma) {
+  std::vector<World_state> result = states;
+  assert(start<result.size() && start>=0);
+  result[start].beta = beta;
+  result[start].gamma = gamma;
+  if (new_duration_in_days <= result.size() - 1) {
+    for (int i = start; i < static_cast<int>(result.size()) - 1;
+         ++i) {  // nota: result.size()-1 corrisponde al numero dell'ultimo
+                 // giorno(la numerazione dei vettori parte da 0!)
+      auto a = next(result[i]);  // computo giorno successivo a start
+      result[i + 1] = a;
+    }
+  } else {
+    for (int i = start; i < static_cast<int>(result.size()) - 1; ++i) {
+      auto a = next(result[i]);
+      result[i + 1] = a;
+    }
+    for (int i = result.size() - 1; i < new_duration_in_days; ++i) {
+      auto a = next(result[i - 1]);
+      result.push_back(a);
+    }
   }
   return result;
 }
