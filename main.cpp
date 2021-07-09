@@ -18,8 +18,7 @@ void print(std::vector<World_state> const& state) {
               << state[i].I << " | " << std::setw(9) << state[i].R << " | "
               << std::setw(9) << state[i].S + state[i].I + state[i].R << " |\n";
   }
-  std::cout << "+-----------+-----------+-----------+-----------+-----------+\n"
-      /*<< state.size()*/;
+  std::cout << "+-----------+-----------+-----------+-----------+-----------+\n";
 }
 
 void print_on_file(std::vector<World_state> const& state) {
