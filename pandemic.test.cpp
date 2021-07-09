@@ -5,7 +5,7 @@
 #include "doctest.h"
 
 TEST_CASE("Testing") {
-  SUBCASE("testing evolve 1") {
+  SUBCASE("testing evolve simple") {
     World_state s0{99,1,0,1,1,100};
     /*s0.S = 99;
     s0.I = 1;
@@ -77,10 +77,44 @@ TEST_CASE("Testing") {
     auto f = evolve(test04.get_state(),test04.get_duration());
     f[5]=approx(f[5]);
     
-    CHECK(f[5] == s05);
+    CHECK(f[5] == s05); 
 
   }
 
+  SUBCASE("testing evolve 3"){ //Higher numbers and days
+
+  World_state s000{100000001,950000,35,0.7777,0.9345,100950036};
+  World_state s010{96465463,129566,4355007,0.7777,0.9345,100950036};
+  World_state s062{95967882,2,4982152,0.7777,0.9345,100950036};
+  World_state s115{95967876,0,4982160,0.7777,0.9345,100950036};
+  World_state s999{95967876,0,4982160,0.7777,0.9345,100950036};
+
+  Pandemic test010(s000, 10);
+    auto g = evolve(test010.get_state(),test010.get_duration());
+    g[10]=approx(g[10]);
+    
+    CHECK(g[10] == s010);
+
+  Pandemic test062(s000, 62);
+    auto h = evolve(test062.get_state(),test062.get_duration());
+    h[62]=approx(h[62]);
+    
+    CHECK(h[62] == s062);
+
+    Pandemic test115(s062, 53);
+    auto l = evolve(test115.get_state(),test115.get_duration());
+    l[53]=approx(l[53]);
+    
+    CHECK(l[53] == s115);
+
+    Pandemic test999(s000, 999);
+    auto m = evolve(test999.get_state(),test999.get_duration());
+    m[999]=approx(m[999]);
+    
+    CHECK(m[999] == s999);
+
+  }
+   
   SUBCASE("testing exeptions") {
     World_state s0{};
     s0.S = 0;
