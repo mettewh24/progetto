@@ -51,7 +51,7 @@ class Pandemic {
     };
     if (duration_in_days < 0) {
       throw std::runtime_error("Invalid time duration");
-    };
+    };//exeptions guaratee that data are correct
   }
 
   World_state const& get_state();
@@ -59,8 +59,8 @@ class Pandemic {
 };
 
 
-std::vector<World_state>  evolve(World_state const&, int const&);
-std::vector<World_state> evolve(std::vector<World_state>, int, int, double,double);
+std::vector<World_state> evolve(World_state const&, int const&);
+std::vector<World_state> modify(std::vector<World_state> const&, int, int, double,double);
 World_state const next(World_state const&);
 
 

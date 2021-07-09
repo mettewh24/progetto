@@ -95,7 +95,7 @@ World_state const next(
   next_state.R = R;
 
   double diff = next_state.S + next_state.I + next_state.R - next_state.N;
-  assert(diff < 0.0001 && diff > -0.0001);  //N must be preserved
+  assert(diff < 0.0001 && diff > -0.0001);  // N must be preserved
 
   return next_state;
 }
@@ -113,17 +113,18 @@ std::vector<World_state> evolve(World_state const& initial_state,
   return result;
 }
 
-std::vector<World_state> evolve(std::vector<World_state> states, int start,
-                                int new_duration_in_days, double beta,
-                                double gamma) {
+std::vector<World_state> modify(std::vector<World_state> const& states,
+                                int start, int new_duration_in_days,
+                                double beta, double gamma) {
   std::vector<World_state> result = states;
   int size = static_cast<int>(result.size());
   assert(start < size && start >= 0);
   result[start].beta = beta;
   result[start].gamma = gamma;
-  if (new_duration_in_days <= size - 1) {
+  if (start + new_duration_in_days <= size - 1) {
     for (int i = start; i < size - 1;
-         ++i) {  // size()-1 matches the number of the last day(numeration starts from 0)
+         ++i) {  // size()-1 matches the number of the last day(numeration
+                 // starts from 0)
       auto a = next(result[i]);  // compute day after start
       result[i + 1] = a;
     }
@@ -133,7 +134,7 @@ std::vector<World_state> evolve(std::vector<World_state> states, int start,
       result[i + 1] = a;
     }
     for (int i = size - 1; i < new_duration_in_days; ++i) {
-      auto a = next(result[i - 1]);
+      auto a = next(result[i]);
       result.push_back(a);
     }
   }
