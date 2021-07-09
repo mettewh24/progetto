@@ -118,6 +118,7 @@ std::vector<World_state> evolve(std::vector<World_state> states, int start,
                                 int new_duration_in_days, double beta,
                                 double gamma) {
   std::vector<World_state> result = states;
+  assert(start<result.size() && start>=0);
   result[start].beta = beta;
   result[start].gamma = gamma;
   if (new_duration_in_days <= result.size() - 1) {
