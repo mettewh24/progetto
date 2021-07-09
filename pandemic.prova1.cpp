@@ -25,13 +25,16 @@ World_state approx(World_state const& state) {
     if (decimals_R > decimals_S && decimals_R > decimals_I) {
       ++integral_R;
     }
-    if (std::abs(decimals_S - decimals_I) < 0.0000001 && std::abs(decimals_S - .5)==0.0000001) {
+    if (std::abs(decimals_S - decimals_I) < 0.0000001 &&
+        std::abs(decimals_S - .5) == 0.0000001) {
       ++integral_S;
     }
-    if (std::abs(decimals_I - decimals_R) < 0.0000001 && std::abs(decimals_I - .5)==0.0000001) {
+    if (std::abs(decimals_I - decimals_R) < 0.0000001 &&
+        std::abs(decimals_I - .5) == 0.0000001) {
       ++integral_I;
     }
-    if (std::abs(decimals_R - decimals_S) < 0.0000001 && std::abs(decimals_R - .5)==0.0000001) {
+    if (std::abs(decimals_R - decimals_S) < 0.0000001 &&
+        std::abs(decimals_R - .5) == 0.0000001) {
       ++integral_R;
     }
   }
@@ -65,7 +68,7 @@ World_state approx(World_state const& state) {
 
   state_approx.S = integral_S;
   state_approx.I = integral_I;
-  state_approx.R = integral_R;  // le parti intere di S I e R
+  state_approx.R = integral_R;  // integral parts of S I e R
   return state_approx;
 }
 
@@ -92,7 +95,7 @@ World_state const next(
   next_state.R = R;
 
   double diff = next_state.S + next_state.I + next_state.R - next_state.N;
-  assert(diff < 0.0001 && diff > -0.0001);  //!
+  assert(diff < 0.0001 && diff > -0.0001);  //N must be preserved
 
   return next_state;
 }
@@ -100,8 +103,8 @@ World_state const next(
 std::vector<World_state> evolve(World_state const& initial_state,
                                 int const& duration_in_days) {
   std::vector<World_state> result{
-      initial_state};       // result ha già lo stato iniziale come elemento
-  assert(!result.empty());  // Result non vuoto(sennò è errore)
+      initial_state};       // result has already initial state inside
+  assert(!result.empty());  // Result non empty(empty== error)
 
   for (int i = 1; i <= duration_in_days; ++i) {
     auto a = next(result.back());
@@ -114,15 +117,14 @@ std::vector<World_state> evolve(std::vector<World_state> states, int start,
                                 int new_duration_in_days, double beta,
                                 double gamma) {
   std::vector<World_state> result = states;
-  int size=static_cast<int>(result.size());
-  assert(start<size && start>=0);
+  int size = static_cast<int>(result.size());
+  assert(start < size && start >= 0);
   result[start].beta = beta;
   result[start].gamma = gamma;
   if (new_duration_in_days <= size - 1) {
     for (int i = start; i < size - 1;
-         ++i) {  // nota: result.size()-1 corrisponde al numero dell'ultimo
-                 // giorno(la numerazione dei vettori parte da 0!)
-      auto a = next(result[i]);  // computo giorno successivo a start
+         ++i) {  // size()-1 matches the number of the last day(numeration starts from 0)
+      auto a = next(result[i]);  // compute day after start
       result[i + 1] = a;
     }
   } else {
@@ -130,7 +132,7 @@ std::vector<World_state> evolve(std::vector<World_state> states, int start,
       auto a = next(result[i]);
       result[i + 1] = a;
     }
-    for (int i = result.size() - 1; i < new_duration_in_days; ++i) {
+    for (int i = size - 1; i < new_duration_in_days; ++i) {
       auto a = next(result[i - 1]);
       result.push_back(a);
     }
