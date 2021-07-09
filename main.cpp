@@ -107,6 +107,31 @@ void print_on_file(std::vector<World_state> const& state) {
 }
 }  // namespace print_on_file
 
+void out(std::vector<World_state> const& states) {
+  char choice_2;
+  std::cin >> choice_2;
+  switch (choice_2) {
+    case 'n':  // print on terminal
+      print::print(states);
+      break;
+
+    case 'a':  // print both on file and on terminal
+      print::print(states);
+      print_on_file::print_on_file(states);
+      break;
+
+    case 'y':  // print on file
+      print_on_file::print_on_file(states);
+      break;
+
+    default:  // if char is wrong, print both on file and on terminal
+      std::cerr << "Invalid char" << '\n';
+      print::print(states);
+      print_on_file::print_on_file(states);
+      break;
+  }
+}
+
 int main() {
   World_state initial_state;
   int duration_in_days;
@@ -153,29 +178,7 @@ int main() {
     a[i] = approx(a[i]);
     assert(a[i].S + a[i].I + a[i].R - a[i].N == 0);
   }
-
-  char choice_2;
-  std::cin >> choice_2;
-  switch (choice_2) {
-    case 'n':  // print on terminal
-      print::print(a);
-      break;
-
-    case 'a':  // print both on file and on terminal
-      print::print(a);
-      print_on_file::print_on_file(a);
-      break;
-
-    case 'y':  // print on file
-      print_on_file::print_on_file(a);
-      break;
-
-    default:  // if char is wrong, print both on file and on terminal
-      std::cerr << "Invalid char" << '\n';
-      print::print(a);
-      print_on_file::print_on_file(a);
-      break;
-  }
+  out(a);
 
   auto past_simulation = a;
   char choice;
@@ -188,12 +191,15 @@ int main() {
       double gamma;
       std::cin >> start >> new_duration_in_days >> beta >> gamma;
 
-      past_simulation = modify(past_simulation, start, new_duration_in_days, beta, gamma);
+      past_simulation =
+          modify(past_simulation, start, new_duration_in_days, beta, gamma);
       for (int i = 0; i < static_cast<int>(past_simulation.size()); ++i) {
         past_simulation[i] = approx(past_simulation[i]);
-        assert(past_simulation[i].S + past_simulation[i].I + past_simulation[i].R - past_simulation[i].N == 0);
+        assert(past_simulation[i].S + past_simulation[i].I +
+                   past_simulation[i].R - past_simulation[i].N ==
+               0);
       }
-      print::print(past_simulation);
+      out(past_simulation);
       std::cin >> choice;
     } else {
     }
