@@ -46,8 +46,8 @@ void print(std::vector<World_state> const& state) {
   std::cout << bar << '\n' << legend << '\n' << bar << '\n';
   int size = state.size();
   for (int i = 0; i < size; ++i) {
-    std::cout << "| " << std::setw(max_lenght) << i
-              << " | " << std::setw(max_lenght) << state[i].S << " | "
+    std::cout << "| " << std::setw(max_lenght) << i << " | "
+              << std::setw(max_lenght) << state[i].S << " | "
               << std::setw(max_lenght) << state[i].I << " | "
               << std::setw(max_lenght) << state[i].R << " | "
               << std::setw(max_lenght) << state[i].S + state[i].I + state[i].R
@@ -175,22 +175,24 @@ int main() {
       break;
   }
 
-  char choice_3;
-  std::cin >> choice_3;
-  choice_3 = static_cast<int>(choice_3);
-  if (choice_3 == 121) {
-    int start;
-    int new_duration_in_days;
-    double beta;
-    double gamma;
-    std::cin >> start >> new_duration_in_days >> beta >> gamma;
-    auto b = evolve(evolve(sir.get_state(), sir.get_duration()), start,
-                    new_duration_in_days, beta, gamma);
-    for (int i = 0; i < b.size(); ++i) {
-      b[i] = approx(b[i]);
-      assert(b[i].S + b[i].I + b[i].R - b[i].N == 0);
+  auto ciao=a;  
+  for (char choice_3 = 'y';choice_3 == 'y';) {
+    std::cin >> choice_3;
+    if (choice_3 == 121) {
+      int start;
+      int new_duration_in_days;
+      double beta;
+      double gamma;
+      std::cin >> start >> new_duration_in_days >> beta >> gamma;
+
+       ciao = evolve(ciao, start,
+                      new_duration_in_days, beta, gamma);
+      for (int i = 0; i < static_cast<int>(ciao.size()); ++i) {
+        ciao[i] = approx(ciao[i]);
+        assert(ciao[i].S + ciao[i].I + ciao[i].R - ciao[i].N == 0);
+      }
+      print::print(ciao);
+    } else {
     }
-    print::print(b);
-  } else {
   }
 }
