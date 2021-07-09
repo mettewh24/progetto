@@ -153,12 +153,17 @@ TEST_CASE("Testing") {
   SUBCASE("testing next 4"){ 
     World_state sg{3,9,0,0.001,0.1,12};
     World_state sh{3,8,1,0.001,0.1,12};
+    World_state si{3,7,2,0.001,0.1,12};
     
-  Pandemic test1c(sg, 1);
+  Pandemic test1c(sg, 2);
     auto o = next(sg);
     o=approx(o);
+    auto s = next(sh);
+    s=approx(s);
 
     CHECK(o == sh);
+    CHECK(s == si);
+
   }
   
   //Tests for exceptions, they need to fail
