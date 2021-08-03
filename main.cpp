@@ -6,6 +6,10 @@
 
 #include "pandemic.hpp"
 
+// MAIN TROPPO INCASINATO, NON SI CAPISCE COSA SI DEVE INSERIRE A TERMINALE,
+// MEGLIO FAR STAMPARE QUALCHE COSA PER GUIDARE ALL'INSERIMENTO DEI CARATTERI E
+// DEI VARI NUMERI CHE SONO NECESSARI
+
 int number_of_digits(int const number) {
   int i = 1;
   int N = number;
@@ -13,7 +17,8 @@ int number_of_digits(int const number) {
     N = N / 10;
   }
   return i;
-}
+}  // sostituisci con qualcosa da algorithm per trovare la lunghezza di un
+   // numero, non saprei però guidarti su cosa
 
 namespace print {
 void print(std::vector<World_state> const& state) {
@@ -138,22 +143,40 @@ int main() {
 
   char choice_1;
   std::cin >> choice_1;
-
-  std::ifstream istrm("data.txt");
+  std::ifstream istrm(
+      "data.txt");  // Ha avuto da ridire che il programma cerca comunque di
+                    // apire il file anche se uno sceglie la lettura da
+                    // terminale, ma non so sincermante come risolvere
   if (!istrm.is_open() && choice_1 == 'y') {
     std::cerr << "failed to open data.txt" << '\n';
     choice_1 =
         'n';  // goes on, but now its necessary to read data from terminal
   }
 
+  auto giorgio = [&]() -> std::istream& {
+    if (choice_1 == 'n') {
+      return std::cin;
+
+    } else {
+      return istrm;
+    }
+  };  // Giaco voleva un oggetto che puntasse alternativamente a cin o a
+      // ifstream, per leggere rispettivamente da terminale o da file, è stato
+      // fatto all'orale sfruttando qualcosa che non ho capito sull'ereditarietà
+      // virtuale(sia cin che ifstrea discendono da istream)
+      // NOTA TROVA NOME DECENTE, IO AVEVO FRETTA E NON MI ANDAVA DI PENSARCI
+
+  std::istream& is = giorgio();
+
+  is >> duration_in_days;
   switch (choice_1) {
     case 'n':  // read from terminal
-      std::cin >> duration_in_days >> initial_state.N >> initial_state.S >>
+      is >> duration_in_days >> initial_state.N >> initial_state.S >>
           initial_state.I >> initial_state.R >> initial_state.beta >>
           initial_state.gamma;
       break;
     case 'y':  // read from file
-      istrm >> duration_in_days >> initial_state.N >> initial_state.S >>
+      is >> duration_in_days >> initial_state.N >> initial_state.S >>
           initial_state.I >> initial_state.R >> initial_state.beta >>
           initial_state.gamma;
       break;
@@ -205,3 +228,8 @@ int main() {
     }
   }
 }
+
+// COMMENTO GENERALE
+// Alla fine più che sulla correttezza del programma(che mi pare di capire che
+// tutto sommato simulasse bene l'epidemia), il prof ha avuto da ridire molto su
+// fatti di ottimizzazione poco intelligente
