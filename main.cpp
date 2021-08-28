@@ -6,19 +6,11 @@
 
 #include "pandemic.hpp"
 
-// MAIN TROPPO INCASINATO, NON SI CAPISCE COSA SI DEVE INSERIRE A TERMINALE,
-// MEGLIO FAR STAMPARE QUALCHE COSA PER GUIDARE ALL'INSERIMENTO DEI CARATTERI E
-// DEI VARI NUMERI CHE SONO NECESSARI
-
 int number_of_digits(int const number) {
-  int i = 1;
   int N = number;
-  for (; N / 10 >= 1; ++i) {
-    N = N / 10;
-  }
-  return i;
-}  // sostituisci con qualcosa da algorithm per trovare la lunghezza di un
-   // numero, non saprei però guidarti su cosa
+  int size = floor(log10(N))+1;
+  return size;
+}
 
 namespace print {
 void print(std::vector<World_state> const& state) {
@@ -114,6 +106,7 @@ void print_on_file(std::vector<World_state> const& state) {
 
 void out(std::vector<World_state> const& states) {
   char choice_2;
+  std::cout << "Print on file (y), terminal (n) or both (a)?: ";
   std::cin >> choice_2;
   switch (choice_2) {
     case 'n':  // print on terminal
@@ -142,38 +135,44 @@ int main() {
   int duration_in_days;
 
   char choice_1;
+  std::cout << "Read from file (y), terminal (n)?: ";
   std::cin >> choice_1;
   std::ifstream istrm(
-      "data.txt");  // Ha avuto da ridire che il programma cerca comunque di
-                    // apire il file anche se uno sceglie la lettura da
-                    // terminale, ma non so sincermante come risolvere
+      "data.txt");
   if (!istrm.is_open() && choice_1 == 'y') {
     std::cerr << "failed to open data.txt" << '\n';
     choice_1 =
         'n';  // goes on, but now its necessary to read data from terminal
   }
 
-  auto giorgio = [&]() -> std::istream& {
+  auto reading = [&]() -> std::istream& {
     if (choice_1 == 'n') {
       return std::cin;
-
+    
     } else {
       return istrm;
+    
     }
-  };  // Giaco voleva un oggetto che puntasse alternativamente a cin o a
-      // ifstream, per leggere rispettivamente da terminale o da file, è stato
-      // fatto all'orale sfruttando qualcosa che non ho capito sull'ereditarietà
-      // virtuale(sia cin che ifstrea discendono da istream)
-      // NOTA TROVA NOME DECENTE, IO AVEVO FRETTA E NON MI ANDAVA DI PENSARCI
+  };
 
-  std::istream& is = giorgio();
+  std::istream& is = reading();
 
-  is >> duration_in_days;
   switch (choice_1) {
     case 'n':  // read from terminal
-      is >> duration_in_days >> initial_state.N >> initial_state.S >>
-          initial_state.I >> initial_state.R >> initial_state.beta >>
-          initial_state.gamma;
+      std::cout << "Enter duration in days: ";
+      is >> duration_in_days;
+      std::cout << "Enter total population: ";
+      is >> initial_state.N;
+      std::cout << "Enter number of susceptibles: ";
+      is >> initial_state.S;
+      std::cout << "Enter number of infected: ";
+      is >> initial_state.I;
+      std::cout << "Enter number of people dead and healed: ";
+      is >> initial_state.R;
+      std::cout << "Enter beta (0<beta<1): ";
+      is >> initial_state.beta;
+      std::cout << "Enter gamma (0<gamma<1): ";
+      is >> initial_state.gamma; // lettura da input dei paramentri dell'epidemia
       break;
     case 'y':  // read from file
       is >> duration_in_days >> initial_state.N >> initial_state.S >>
@@ -188,6 +187,11 @@ int main() {
           initial_state.gamma;  // lettura da input dei paramentri dell'epidemia
       break;
   }
+  /*if(initial_state.beta < 0 || initial_state.beta > 1 || duration_in_days < 0 || initial_state.gamma < 0 || 
+     initial_state.gamma > 1 || initial_state.N <= 0 || initial_state.S < 0 || initial_state.I < 0 || 
+     initial_state.R < 0) {
+      throw std::runtime_error("Un dato non contenuto nel dominio");
+      }*/
 
   try {
     Pandemic sir{initial_state, duration_in_days};
@@ -205,6 +209,7 @@ int main() {
 
   auto past_simulation = a;
   char choice;
+  std::cout << "Do you want to modify gamma and beta? (y or n): ";
   std::cin >> choice;
   for (; choice == 'y' && std::cin.good();) {
     if (choice == 'y') {
@@ -212,7 +217,14 @@ int main() {
       int new_duration_in_days;
       double beta;
       double gamma;
-      std::cin >> start >> new_duration_in_days >> beta >> gamma;
+      std::cout << "Enter the day in which change gamma and beta: ";
+      std::cin >> start;
+      std::cout << "Enter new duration in days: ";
+      std::cin >> new_duration_in_days;
+      std::cout << "Enter new gamma: ";
+      std::cin >> beta;
+      std::cout << "Enter new beta: ";
+      std::cin >> gamma;
 
       past_simulation =
           modify(past_simulation, start, new_duration_in_days, beta, gamma);
@@ -223,13 +235,9 @@ int main() {
                0);
       }
       out(past_simulation);
+      std::cout << "Do you want to modify again gamma and beta? (y or n): ";
       std::cin >> choice;
     } else {
     }
   }
 }
-
-// COMMENTO GENERALE
-// Alla fine più che sulla correttezza del programma(che mi pare di capire che
-// tutto sommato simulasse bene l'epidemia), il prof ha avuto da ridire molto su
-// fatti di ottimizzazione poco intelligente

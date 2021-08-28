@@ -14,10 +14,6 @@ struct World_state {
   double gamma;
   int N;
 };
-// Ha osato anche dire che con beta e gamma un world_state pesa ben 16 byte in
-// più, e che a lungo andare il vettore di stati diventerebbe molto pesante per
-// dei numeri che si ripetono, ma dato che a una certa è possibile scegliere di
-// modificarli,  SECONDO ME devono rimanere qui.
 
 World_state approx(World_state const&);
 
@@ -65,8 +61,7 @@ class Pandemic {
 std::vector<World_state> evolve(World_state const&, int const&);
 std::vector<World_state> modify(std::vector<World_state> const&, int, int,
                                 double, double);
-World_state const next(
-    World_state const&);  // Non ricordo perchè, il const che c'è davanti a next
-                          // non gli andava bene
+World_state next(
+    World_state const&); 
 
 #endif

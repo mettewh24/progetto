@@ -5,12 +5,9 @@
 #include "pandemic.hpp"
 
 int number_of_digits(int const number) {
-  int i = 1;
   int N = number;
-  for (; N / 10 >= 1; ++i) {
-    N = N / 10;
-  }
-  return i;
+  int size = floor(log10(N))+1;
+  return size;
 }
 
 void print(std::vector<World_state> const& state) {
@@ -59,9 +56,20 @@ int main() {
   World_state initial_state;
   int duration_in_days;
 
-  std::cin >> duration_in_days >> initial_state.N >> initial_state.S >>
-      initial_state.I >> initial_state.R >> initial_state.beta >>
-      initial_state.gamma;  // lettura da input dei paramentri dell'epidemia
+  std::cout << "Enter duration in days: ";
+  std::cin >> duration_in_days;
+  std::cout << "Enter total population: ";
+  std::cin >> initial_state.N;
+  std::cout << "Enter number of susceptibles: ";
+  std::cin >> initial_state.S;
+  std::cout << "Enter number of infected: ";
+  std::cin >> initial_state.I;
+  std::cout << "Enter number of people dead and healed: ";
+  std::cin >> initial_state.R;
+  std::cout << "Enter beta (0<beta<1): ";
+  std::cin >> initial_state.beta;
+  std::cout << "Enter gamma (0<gamma<1): ";
+  std::cin >> initial_state.gamma; // lettura da input dei paramentri dell'epidemia
 
   try {
     Pandemic sir{initial_state, duration_in_days};

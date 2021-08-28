@@ -1,8 +1,7 @@
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
-//#include "pandemic.hpp"
 #include "doctest.h"
 #include "pandemic.hpp"
-// NON HA AVUTO DA RIDIRE SUI TEST
+
 
 // Some tests for the function evolve
 TEST_CASE("Testing") {

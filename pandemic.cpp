@@ -4,10 +4,6 @@
 #include <cmath>
 #include <vector>
 
-// GIACO ERA CONVINTO CHE ESISTESSE UN QUALCHE ALGORITMO CHE FACCIA LA STESSA
-// COSA DI APPROX, SE LO TROVI MEGLIO(ma secondo me non esiste)
-// POTREBBE NON ESSERE CATTIVA IDEA AGGIUNGERE QUALCHE NAMESPACE, MA ME LO AVEVA
-// SOLO BUTTATO Lì
 World_state approx(World_state const& state) {
   World_state state_approx = state;
   int integral_R = static_cast<int>(state_approx.R);
@@ -17,65 +13,59 @@ World_state approx(World_state const& state) {
   double decimals_R = state_approx.R - integral_R;
   double decimals_S = state_approx.S - integral_S;
   double decimals_I = state_approx.I - integral_I;
-  auto decimal_sum = decimals_I + decimals_R + decimals_S;
 
-  if (decimal_sum <= 1.0001 && decimal_sum >= 0.9999) {
-    if (decimals_S > decimals_R && decimals_S > decimals_I) {
-      ++integral_S;
+  if(decimals_S > 0.5 && decimals_I > 0.5){
+    if(decimals_S > decimals_R && decimals_I > decimals_R){
+      state_approx.R=floor(state_approx.R);
+      state_approx.I=round(state_approx.I);
+      state_approx.S=round(state_approx.S);
     }
-    if (decimals_I > decimals_R && decimals_I > decimals_S) {
-      ++integral_I;
+    if(decimals_S > decimals_I && decimals_R > decimals_I) {
+      state_approx.I=floor(state_approx.I);
+      state_approx.R=round(state_approx.R);
+      state_approx.S=round(state_approx.S);
     }
-    if (decimals_R > decimals_S && decimals_R > decimals_I) {
-      ++integral_R;
+    if(decimals_I > decimals_S && decimals_R > decimals_S) {
+      state_approx.S=floor(state_approx.S);
+      state_approx.R=round(state_approx.R);
+      state_approx.I=round(state_approx.I);
     }
-    if (std::abs(decimals_S - decimals_I) < 0.0000001 &&
-        std::abs(decimals_S - .5) == 0.0000001) {
-      ++integral_S;
+  } else if(decimals_S < 0.5 && decimals_I < 0.5 && decimals_R < 0.5){
+    if(decimals_S > decimals_R && decimals_I > decimals_R){
+      state_approx.R=round(state_approx.R);
+      if(decimals_S > decimals_I) {
+      state_approx.I=round(state_approx.I);
+      state_approx.S=ceil(state_approx.S);
+      } else {
+      state_approx.S=round(state_approx.S);
+      state_approx.I=ceil(state_approx.I);
+      }
     }
-    if (std::abs(decimals_I - decimals_R) < 0.0000001 &&
-        std::abs(decimals_I - .5) == 0.0000001) {
-      ++integral_I;
+    if(decimals_S > decimals_I && decimals_R > decimals_I){
+      state_approx.I=round(state_approx.I);
+      if(decimals_S > decimals_R) {
+      state_approx.R=round(state_approx.R);
+      state_approx.S=ceil(state_approx.S);
+      } else {
+      state_approx.S=round(state_approx.S);
+      state_approx.R=ceil(state_approx.R);
+      }
     }
-    if (std::abs(decimals_R - decimals_S) < 0.0000001 &&
-        std::abs(decimals_R - .5) == 0.0000001) {
-      ++integral_R;
-    }
-  }
-  if (decimal_sum <= 2.0001 && decimal_sum >= 1.9999) {
-    if (decimals_S > decimals_R or decimals_S > decimals_I) {
-      ++integral_S;
-    }
-    if (decimals_I > decimals_R or decimals_I > decimals_S) {
-      ++integral_I;
-    }
-    if (decimals_R > decimals_S or decimals_R > decimals_I) {
-      ++integral_R;
-    }
-    if (std::abs(decimals_S - decimals_I) < 0.0000001 &&
-        decimals_S < decimals_R) {
-      ++integral_S;
-    }
-    if (std::abs(decimals_I - decimals_R) < 0.0000001 &&
-        decimals_I < decimals_S) {
-      ++integral_I;
-    }
-    if (std::abs(decimals_R - decimals_S) < 0.0000001 &&
-        decimals_R < decimals_I) {
-      ++integral_R;
-    }
-  }
-  if (decimal_sum < 0.0000001) {
+    if(decimals_I > decimals_S && decimals_R > decimals_S){
+      state_approx.S=round(state_approx.S);
+      if(decimals_I > decimals_R) {
+      state_approx.R=round(state_approx.R);
+      state_approx.I=ceil(state_approx.I);
+      } else {
+      state_approx.I=round(state_approx.I);
+      state_approx.R=ceil(state_approx.R);
+      }
+   } 
   } else {
-  }  // Giaco non voleva che ci fossero degli if che non fanno nulla, quindi o
-     // si mette un messaggio di errore nell'else se non rientra nei tre casi
-     // possibili(decimali uguali a 0,1 o 2), o altrimenti si cava dall'ultimo
-     // if in poi
-  assert(integral_S + integral_I + integral_R == state_approx.N);
-
-  state_approx.S = integral_S;
-  state_approx.I = integral_I;
-  state_approx.R = integral_R;  // integral parts of S I e R
+   state_approx.S = round(state_approx.S);
+   state_approx.I = round(state_approx.I);
+   state_approx.R = state_approx.N - state_approx.S - state_approx.I;
+  }
   return state_approx;
 }
 
@@ -89,7 +79,7 @@ World_state const& Pandemic::get_state() { return p_initial_state; }
 
 int const& Pandemic::get_duration() { return p_duration_in_days; }
 
-World_state const next(  // stessa faccenda del const descritta in pandemic.hpp
+World_state next(  
     World_state const& state)  // function that computes the next state
 {
   World_state next_state = state;
@@ -97,12 +87,13 @@ World_state const next(  // stessa faccenda del const descritta in pandemic.hpp
   double S = state.S - state.beta * state.S * state.I * std::pow(state.N, -1);
   double I = state.I + state.beta * state.S * state.I * std::pow(state.N, -1) -
              state.gamma * state.I;
+             
   next_state.S = S;
   next_state.I = I;
   next_state.R = R;
 
   double diff = next_state.S + next_state.I + next_state.R - next_state.N;
-  assert(diff < 0.0001 && diff > -0.0001);  // N must be preserved
+  assert(diff < 0.0001 && diff > -0.0001);  // N must be preserved*/
 
   return next_state;
 }
