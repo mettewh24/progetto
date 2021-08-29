@@ -1,10 +1,11 @@
+#include "pandemic.hpp"
+
 #include <algorithm>
 #include <cassert>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
 
-#include "pandemic.hpp"
 
 int number_of_digits(int const number) {
   int N = number;
@@ -172,7 +173,7 @@ int main() {
       std::cout << "Enter beta (0<beta<1): ";
       is >> initial_state.beta;
       std::cout << "Enter gamma (0<gamma<1): ";
-      is >> initial_state.gamma; // lettura da input dei paramentri dell'epidemia
+      is >> initial_state.gamma; // lettura da input dei parametri dell'epidemia
       break;
     case 'y':  // read from file
       is >> duration_in_days >> initial_state.N >> initial_state.S >>
@@ -184,14 +185,9 @@ int main() {
       std::cerr << "Invalid char, insert data:" << '\n';
       std::cin >> duration_in_days >> initial_state.N >> initial_state.S >>
           initial_state.I >> initial_state.R >> initial_state.beta >>
-          initial_state.gamma;  // lettura da input dei paramentri dell'epidemia
+          initial_state.gamma;  // lettura da input dei parametri dell'epidemia
       break;
   }
-  /*if(initial_state.beta < 0 || initial_state.beta > 1 || duration_in_days < 0 || initial_state.gamma < 0 || 
-     initial_state.gamma > 1 || initial_state.N <= 0 || initial_state.S < 0 || initial_state.I < 0 || 
-     initial_state.R < 0) {
-      throw std::runtime_error("Un dato non contenuto nel dominio");
-      }*/
 
   try {
     Pandemic sir{initial_state, duration_in_days};

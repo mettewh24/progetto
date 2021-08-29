@@ -1,8 +1,8 @@
+#include "pandemic.hpp"
+
 #include <cassert>
 #include <iomanip>
 #include <iostream>
-
-#include "pandemic.hpp"
 
 int number_of_digits(int const number) {
   int N = number;
@@ -69,7 +69,7 @@ int main() {
   std::cout << "Enter beta (0<beta<1): ";
   std::cin >> initial_state.beta;
   std::cout << "Enter gamma (0<gamma<1): ";
-  std::cin >> initial_state.gamma; // lettura da input dei paramentri dell'epidemia
+  std::cin >> initial_state.gamma; // lettura da input dei parametri dell'epidemia
 
   try {
     Pandemic sir{initial_state, duration_in_days};

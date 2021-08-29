@@ -1,6 +1,6 @@
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
-#include "doctest.h"
 #include "pandemic.hpp"
+#include "doctest.h"
 
 
 // Some tests for the function evolve

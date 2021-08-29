@@ -102,7 +102,7 @@ std::vector<World_state> evolve(World_state const& initial_state,
                                 int const& duration_in_days) {
   std::vector<World_state> result{
       initial_state};       // result has already initial state inside
-  assert(!result.empty());  // Result non empty(empty== error)
+  assert(!result.empty());  // Result non empty(empty == error)
 
   for (int i = 1; i <= duration_in_days; ++i) {
     auto a = next(result.back());
